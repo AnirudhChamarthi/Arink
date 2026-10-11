@@ -60,26 +60,22 @@ def _options_greeks(pos: EnrichedPosition) -> PositionGreeks:
 
 
 def _synthetic_equity_greeks(pos: EnrichedPosition) -> PositionGreeks:
-    """Finite-difference-style Greeks for plain equity/cash positions."""
+    """Greeks for plain (non-option) positions, which are linear in the underlying.
+
+    * ``delta`` is the beta-adjusted share delta ``quantity * beta`` (1.0 when beta is unknown).
+    * ``gamma`` is taken by finite difference of the position value; it is zero because the
+      value is linear in spot.
+    * ``vega``, ``theta`` and ``rho`` are zero: a share has no volatility exposure, no time
+      decay, and no explicit interest-rate term. (They used to be filled with option-style
+      formulas, e.g. a theta of about -$79 per day on a $10k stock position.)
+    """
     q = pos.quantity
     s = max(pos.current_price, 1e-6)
-    vol = max(pos.implied_vol, 1e-4)
-    r = pos.risk_free_rate
     beta = pos.beta if pos.beta is not None else 1.0
-    T = 1.0 / 252.0
 
     delta = q * beta
-    # 1% spot bump
-    d_s = s * 0.01
-    p_up = q * (s + d_s)
-    p_dn = q * (s - d_s)
-    gamma = (p_up - 2 * q * s + p_dn) / (d_s**2)
-
-    d_sigma = 0.01
-    vega = q * s * norm.pdf(0.0) * math.sqrt(T) * d_sigma
-
-    theta = -q * s * vol / (2.0 * math.sqrt(T)) / 252.0 if T > 0 else 0.0
-    rho = q * s * T * 0.0001
+    d_s = s * 0.01  # 1% spot bump
+    gamma = (q * (s + d_s) - 2 * q * s + q * (s - d_s)) / (d_s**2)
 
     if pos.asset_class.value == "Cash":
         return PositionGreeks(
@@ -96,9 +92,9 @@ def _synthetic_equity_greeks(pos: EnrichedPosition) -> PositionGreeks:
         ticker=pos.ticker,
         delta=delta,
         gamma=gamma,
-        vega=vega,
-        theta=theta,
-        rho=rho,
+        vega=0.0,
+        theta=0.0,
+        rho=0.0,
         greeks_method=GreeksMethod.SYNTHETIC_FINITE_DIFFERENCE,
     )
 
