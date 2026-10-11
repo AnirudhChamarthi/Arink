@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from models.exclusion_policy import exclusion_breaches_for_position
 from models.portfolio_utils import position_market_value, position_weights
 from schemas.contract import (
@@ -12,6 +14,21 @@ from schemas.contract import (
 )
 
 _STRANDED_SECTORS = {"energy", "oil", "gas", "coal", "petroleum", "utilities"}
+# A sector label containing one of these describes low-carbon activity, not a stranded-asset risk.
+_LOW_CARBON_WORDS = {"renewable", "renewables", "solar", "wind", "hydro", "hydroelectric", "geothermal", "clean"}
+
+
+def is_stranded_sector(sector: str | None) -> bool:
+    """True for fossil-fuel-linked sector labels, matched on whole words.
+
+    Substring matching flagged "Renewable Energy" and "Clean Energy" as stranded assets (they
+    contain "energy") and would match "gas" inside unrelated words. Words are compared exactly
+    and any low-carbon word in the label overrides a match.
+    """
+    words = set(re.findall(r"[a-z0-9]+", (sector or "").lower()))
+    if words & _LOW_CARBON_WORDS:
+        return False
+    return bool(words & _STRANDED_SECTORS)
 _PARIS_TARGET_CARBON = 100.0  # tCO2e/$M — simplified IEA NZ pathway proxy
 
 
@@ -52,8 +69,7 @@ def run_sustainability(
                 mv * pos.carbon_intensity * carbon_price_shock / 1_000_000.0
             ) / total_mv
 
-        sector = (pos.sector or "").lower()
-        if any(token in sector for token in _STRANDED_SECTORS):
+        if is_stranded_sector(pos.sector):
             stranded_mv += position_market_value(pos)
 
         if run_exclusion_check and filters:
