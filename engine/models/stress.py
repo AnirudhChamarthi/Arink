@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from models.portfolio_utils import position_market_value, position_weights
+from models.portfolio_utils import gross_exposure, position_signed_value
 from schemas.contract import EnrichedPortfolio, StressPositionResult, StressResult, StressScenario
 
 _SCENARIOS_PATH = Path(__file__).resolve().parents[2] / "shared" / "scenarios.json"
@@ -48,12 +48,13 @@ def run_stress(
         shocks = dict(entry.get("shocks") or {})
         scenario_name = scenario.value
 
-    weighted = position_weights(portfolio)
-    total_mv = sum(position_market_value(pos) for pos, _ in weighted) or 1.0
+    # P&L uses signed market values, so a short position gains when its shock is negative.
+    # Percentages are relative to gross exposure (equal to the portfolio value when long-only).
+    total_mv = gross_exposure(portfolio) or 1.0
     results: list[StressPositionResult] = []
 
-    for pos, _weight in weighted:
-        mv = position_market_value(pos)
+    for pos in portfolio.positions:
+        mv = position_signed_value(pos)
         shock = _shock_for_position(pos, shocks)
         pnl = mv * shock
         pct = pnl / total_mv

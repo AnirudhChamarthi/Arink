@@ -7,7 +7,7 @@ import math
 import numpy as np
 from scipy.stats import norm
 
-from models.portfolio_utils import position_market_value
+from models.portfolio_utils import position_signed_value
 from schemas.contract import (
     EnrichedPortfolio,
     EnrichedPosition,
@@ -88,7 +88,7 @@ def _synthetic_equity_greeks(pos: EnrichedPosition) -> PositionGreeks:
             gamma=0.0,
             vega=0.0,
             theta=0.0,
-            rho=position_market_value(pos) * 0.0001,
+            rho=position_signed_value(pos) * 0.0001,
             greeks_method=GreeksMethod.SYNTHETIC_FINITE_DIFFERENCE,
         )
 

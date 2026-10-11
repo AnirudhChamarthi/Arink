@@ -111,7 +111,7 @@ def _position_weights(portfolio: EnrichedPortfolio) -> list[tuple[str, float, fl
     rows: list[tuple[str, float, float]] = []
     for pos in portfolio.positions:
         mv = pos.quantity if pos.asset_class.value == "Cash" else pos.current_price * pos.quantity
-        rows.append((pos.ticker, max(mv, 0.0), pos.esg_score))
+        rows.append((pos.ticker, abs(mv), pos.esg_score))  # concentration by gross exposure
     total = sum(m for _, m, _ in rows) or 1.0
     return [(t, m / total, e) for t, m, e in rows]
 
@@ -187,7 +187,7 @@ def _run_concentration(portfolio: EnrichedPortfolio, limits: RiskLimits) -> _Mod
     topline = f"{pct:.2f}%"
     label = "Largest single-name weight"
     formula = [
-        "Concentration = max(w_i) where w_i = MV_i / Σ MV",
+        "Concentration = max(w_i) where w_i = |MV_i| / Σ |MV|",
         f"Largest position: {ticker}",
         f"Weight = {topline}",
     ]
