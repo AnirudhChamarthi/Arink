@@ -1,0 +1,54 @@
+<Window x:Class="Riskbot.App.Views.EsgPreferencesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ESG &amp; Exclusion Preferences"
+        Height="540" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource ShellBackground}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="20">
+        <StackPanel>
+            <TextBlock Style="{StaticResource PanelHeader}" Text="ESG &amp; EXCLUSIONS" Margin="0,0,0,12"/>
+            <TextBlock TextWrapping="Wrap"
+                       Foreground="{StaticResource TextSecondary}"
+                       FontSize="12"
+                       Margin="0,0,0,16"
+                       Text="Optional sector presets and explicit ticker exclusions. Example: BA for Boeing without blanket defense-sector rules."/>
+
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Sector presets (optional)"/>
+            <CheckBox x:Name="WeaponsCheck" Content="Weapons / defense contractors" Margin="0,2"/>
+            <CheckBox x:Name="TobaccoCheck" Content="Tobacco" Margin="0,2"/>
+            <CheckBox x:Name="FossilCheck" Content="Fossil fuels" Margin="0,2"/>
+            <CheckBox x:Name="GamblingCheck" Content="Gambling" Margin="0,2,0,16"/>
+
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Excluded tickers (comma-separated)"/>
+            <TextBox x:Name="TickersBox" Height="30" VerticalContentAlignment="Center"
+                     FontFamily="{StaticResource MonoFont}"
+                     ToolTip="Example: BA, XOM"/>
+            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap" Margin="0,4,0,14"
+                       Text="Only listed symbols are flagged — e.g. BA excludes Boeing only."/>
+
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Excluded company name keywords"/>
+            <TextBox x:Name="NamesBox" Height="30" VerticalContentAlignment="Center"
+                     FontFamily="{StaticResource MonoFont}"/>
+            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap" Margin="0,4,0,14"
+                       Text="Substring match on enriched company name."/>
+
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Custom sector keywords (comma-separated)"/>
+            <TextBox x:Name="SectorsBox" Height="30" VerticalContentAlignment="Center"
+                     FontFamily="{StaticResource MonoFont}"/>
+            <TextBlock Style="{StaticResource HintText}" TextWrapping="Wrap" Margin="0,4,0,14"
+                       Text="Matched against position sector text. Portfolio Metadata can add more filters."/>
+
+            <TextBlock Style="{StaticResource FieldLabel}" Text="Minimum portfolio ESG score (optional)"/>
+            <TextBox x:Name="EsgMinBox" Height="30" VerticalContentAlignment="Center"
+                     FontFamily="{StaticResource MonoFont}"
+                     ToolTip="Leave blank for no portfolio ESG floor"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Cancel" Width="80" Margin="0,0,8,0" IsCancel="True"/>
+                <Button Content="OK" Width="80" Style="{StaticResource AccentButton}" IsDefault="True" Click="OnOk"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

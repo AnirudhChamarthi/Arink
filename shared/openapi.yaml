@@ -1,0 +1,884 @@
+openapi: 3.1.0
+info:
+  title: Riskbot Engine API
+  version: 1.0.0
+  description: >
+    Quantitative risk engine for Riskbot. C# WPF desktop app is the sole client.
+    All numerical calculations live here. All UI rendering lives in C#.
+
+servers:
+  - url: http://localhost:8765
+    description: Local engine process
+
+# ─────────────────────────────────────────────
+# Reusable schemas
+# ─────────────────────────────────────────────
+components:
+  schemas:
+
+    # ── Raw position (as loaded from .xlsx) ──
+    RawPosition:
+      type: object
+      required: [ticker, asset_class, quantity, cost_price, currency]
+      properties:
+        ticker:        { type: string,  example: AAPL }
+        isin:          { type: string,  example: US0378331005, nullable: true }
+        asset_class:   { type: string,  enum: [Equity, FixedIncome, Commodity, Cash] }
+        quantity:      { type: number,  format: double }
+        cost_price:    { type: number,  format: double }
+        currency:      { type: string,  example: USD }
+        sector:        { type: string,  example: Technology, nullable: true }
+        country:       { type: string,  example: US, nullable: true }
+        esg_override:  { type: number,  format: double, nullable: true, description: "Manual ESG score 0-100" }
+
+    # ── Enriched position (returned by /enrich) ──
+    EnrichedPosition:
+      allOf:
+        - $ref: '#/components/schemas/RawPosition'
+        - type: object
+          required: [current_price, returns_252d, implied_vol, risk_free_rate, esg_score,
+                     carbon_intensity, market_cap, beta]
+          properties:
+            name:             { type: string,  example: Apple Inc. }
+            current_price:    { type: number,  format: double }
+            returns_252d:     { type: array,   items: { type: number, format: double },
+                                description: "252 daily log-returns, oldest first" }
+            implied_vol:      { type: number,  format: double, description: "30-day ATM implied vol (annualised)" }
+            risk_free_rate:   { type: number,  format: double, description: "3-month T-bill rate" }
+            esg_score:        { type: number,  format: double, description: "0–100, higher is better" }
+            carbon_intensity: { type: number,  format: double, description: "tCO2e per $M invested" }
+            market_cap:       { type: number,  format: double, nullable: true }
+            beta:             { type: number,  format: double, nullable: true }
+            # Options chain fields — present when available
+            has_options:      { type: boolean, default: false }
+            options_chain:    { $ref: '#/components/schemas/OptionsChain', nullable: true }
+
+    # ── Options chain ──
+    OptionsStrike:
+      type: object
+      required: [strike, expiry, call_bid, call_ask, put_bid, put_ask, call_iv, put_iv]
+      properties:
+        strike:   { type: number, format: double }
+        expiry:   { type: string, format: date }
+        call_bid: { type: number, format: double }
+        call_ask: { type: number, format: double }
+        put_bid:  { type: number, format: double }
+        put_ask:  { type: number, format: double }
+        call_iv:  { type: number, format: double }
+        put_iv:   { type: number, format: double }
+        open_interest: { type: integer, nullable: true }
+
+    OptionsChain:
+      type: object
+      required: [ticker, strikes]
+      properties:
+        ticker:  { type: string }
+        strikes: { type: array, items: { $ref: '#/components/schemas/OptionsStrike' } }
+
+    # ── Full enriched portfolio ──
+    EnrichedPortfolio:
+      type: object
+      required: [portfolio_name, base_currency, positions]
+      properties:
+        portfolio_name: { type: string }
+        base_currency:  { type: string, example: USD }
+        benchmark:      { type: string, example: SPY, nullable: true }
+        positions:      { type: array,  items: { $ref: '#/components/schemas/EnrichedPosition' } }
+
+    # ── Slim enrich (desktop / blotter) — no returns_252d or options_chain ──
+    EnrichedPositionDisplay:
+      allOf:
+        - $ref: '#/components/schemas/RawPosition'
+        - type: object
+          required: [current_price, implied_vol, risk_free_rate, esg_score, carbon_intensity]
+          properties:
+            name:             { type: string }
+            current_price:    { type: number, format: double }
+            implied_vol:      { type: number, format: double }
+            risk_free_rate:   { type: number, format: double }
+            esg_score:        { type: number, format: double }
+            carbon_intensity: { type: number, format: double }
+            market_cap:       { type: number, format: double, nullable: true }
+            beta:             { type: number, format: double, nullable: true }
+            has_options:      { type: boolean, default: false }
+
+    EnrichedPortfolioDisplay:
+      type: object
+      required: [portfolio_name, base_currency, positions]
+      properties:
+        portfolio_name: { type: string }
+        base_currency:  { type: string }
+        benchmark:      { type: string, nullable: true }
+        positions:      { type: array, items: { $ref: '#/components/schemas/EnrichedPositionDisplay' } }
+
+    EnrichResponse:
+      type: object
+      required: [portfolio_session_id, response_detail, portfolio]
+      properties:
+        portfolio_session_id:
+          type: string
+          format: uuid
+          description: Reference to full enriched portfolio stored on engine (4h TTL)
+        response_detail:
+          type: string
+          enum: [display, full]
+        portfolio:
+          description: display = EnrichedPortfolioDisplay; full = EnrichedPortfolio
+          oneOf:
+            - $ref: '#/components/schemas/EnrichedPortfolioDisplay'
+            - $ref: '#/components/schemas/EnrichedPortfolio'
+
+    # ── Risk limits (from Metadata sheet) ──
+    RiskLimits:
+      type: object
+      properties:
+        var_limit:          { type: number, format: double, example: 0.05, description: "Max portfolio VaR as decimal" }
+        max_concentration:  { type: number, format: double, example: 0.15, description: "Max single-name weight" }
+        esg_min_score:      { type: number, format: double, example: 40.0, nullable: true }
+        exclusion_filters:
+          type: array
+          items: { type: string }
+          description: >
+            Optional sector presets (weapons, tobacco, fossil_fuels, gambling),
+            explicit tickers (PLTR or ticker:PLTR), name keywords (name:palantir),
+            or custom sector tokens (sector:surveillance).
+
+    # ── Greeks ──
+    PositionGreeks:
+      type: object
+      required: [ticker, delta, gamma, vega, theta, rho, greeks_method]
+      properties:
+        ticker:        { type: string }
+        delta:         { type: number, format: double }
+        gamma:         { type: number, format: double }
+        vega:          { type: number, format: double }
+        theta:         { type: number, format: double }
+        rho:           { type: number, format: double }
+        greeks_method: { type: string, enum: [black_scholes, synthetic_finite_difference] }
+
+    PortfolioGreeks:
+      type: object
+      required: [positions, portfolio_delta, portfolio_gamma, portfolio_vega, portfolio_theta, portfolio_rho]
+      properties:
+        positions:       { type: array, items: { $ref: '#/components/schemas/PositionGreeks' } }
+        portfolio_delta: { type: number, format: double }
+        portfolio_gamma: { type: number, format: double }
+        portfolio_vega:  { type: number, format: double }
+        portfolio_theta: { type: number, format: double }
+        portfolio_rho:   { type: number, format: double }
+
+    # ── VaR ──
+    VarContribution:
+      type: object
+      required: [ticker, var_contribution, pct_of_total]
+      properties:
+        ticker:          { type: string }
+        var_contribution: { type: number, format: double }
+        pct_of_total:    { type: number, format: double }
+
+    VarResult:
+      type: object
+      required: [var, cvar, method, confidence, horizon_days, contributions]
+      properties:
+        var:          { type: number, format: double, description: "Portfolio VaR as positive decimal, e.g. 0.047" }
+        cvar:         { type: number, format: double, description: "Portfolio CVaR (Expected Shortfall)" }
+        method:       { type: string, enum: [parametric, historical, montecarlo] }
+        confidence:   { type: number, format: double }
+        horizon_days: { type: integer }
+        contributions: { type: array, items: { $ref: '#/components/schemas/VarContribution' } }
+        confidence_interval_low:  { type: number, format: double, nullable: true }
+        confidence_interval_high: { type: number, format: double, nullable: true }
+
+    # ── Stress test ──
+    StressPositionResult:
+      type: object
+      required: [ticker, pnl_impact, pct_impact]
+      properties:
+        ticker:     { type: string }
+        pnl_impact: { type: number, format: double }
+        pct_impact: { type: number, format: double }
+
+    StressResult:
+      type: object
+      required: [scenario, portfolio_pnl, portfolio_pct, positions, worst_positions, excel_report_path]
+      properties:
+        scenario:       { type: string }
+        portfolio_pnl:  { type: number, format: double }
+        portfolio_pct:  { type: number, format: double }
+        positions:      { type: array, items: { $ref: '#/components/schemas/StressPositionResult' } }
+        worst_positions: { type: array, items: { $ref: '#/components/schemas/StressPositionResult' },
+                           description: "Top 5 worst-hit positions" }
+        excel_report_path: { type: string, description: "Path to generated .xlsx under engine/output/reports" }
+
+    # ── Sustainability ──
+    ExclusionBreach:
+      type: object
+      required: [ticker, filter, reason]
+      properties:
+        ticker: { type: string }
+        filter: { type: string }
+        reason: { type: string }
+
+    SustainabilityResult:
+      type: object
+      required: [portfolio_esg_score, carbon_intensity_weighted, carbon_var,
+                 paris_alignment_gap_pct, exclusion_breaches, stranded_asset_exposure_pct]
+      properties:
+        portfolio_esg_score:          { type: number, format: double }
+        carbon_intensity_weighted:    { type: number, format: double, description: "tCO2e/$M" }
+        carbon_var:                   { type: number, format: double, description: "P&L impact of carbon price shock" }
+        paris_alignment_gap_pct:      { type: number, format: double, description: "% deviation from IEA NZ pathway" }
+        exclusion_breaches:           { type: array, items: { $ref: '#/components/schemas/ExclusionBreach' } }
+        stranded_asset_exposure_pct:  { type: number, format: double }
+        per_position_esg:
+          type: array
+          items:
+            type: object
+            properties:
+              ticker:           { type: string }
+              esg_score:        { type: number, format: double }
+              carbon_intensity: { type: number, format: double }
+              weight:           { type: number, format: double }
+
+    # ── GARCH ──
+    GarchResult:
+      type: object
+      required: [ticker, omega, alpha, beta_param, log_likelihood, aic, bic,
+                 vol_forecast_10d, conditional_var_1d]
+      properties:
+        ticker:             { type: string }
+        omega:              { type: number, format: double }
+        alpha:              { type: number, format: double }
+        beta_param:         { type: number, format: double }
+        log_likelihood:     { type: number, format: double }
+        aic:                { type: number, format: double }
+        bic:                { type: number, format: double }
+        vol_forecast_series: { type: array, items: { type: number, format: double },
+                               description: "10-day conditional volatility forecast" }
+        vol_forecast_10d:   { type: number, format: double }
+        conditional_var_1d: { type: number, format: double }
+        arma_order:
+          type: object
+          nullable: true
+          properties:
+            p: { type: integer }
+            q: { type: integer }
+
+    # ── NLQ ──
+    NlqRequest:
+      type: object
+      required: [query, limits]
+      properties:
+        query:     { type: string }
+        portfolio_session_id:
+          type: string
+          format: uuid
+          description: Preferred — full enriched book from POST /enrich (engine memory, 4h TTL)
+        portfolio: { $ref: '#/components/schemas/EnrichedPortfolio', nullable: true }
+        limits:    { $ref: '#/components/schemas/RiskLimits' }
+      anyOf:
+        - required: [portfolio_session_id]
+        - required: [portfolio]
+
+    NlqResult:
+      type: object
+      required: [topline_number, topline_label, formula_breakdown, explanation,
+                 excel_report_path, models_used]
+      properties:
+        topline_number:    { type: string,  example: "4.73%" }
+        topline_label:     { type: string,  example: "1-Day 99% VaR (Monte Carlo)" }
+        formula_breakdown: { type: array,   items: { type: string },
+                             description: "Lines of the formula derivation in display order" }
+        explanation:       { type: string,  description: "Claude-generated prose explanation" }
+        excel_report_path: { type: string,  description: "Absolute path to generated .xlsx report" }
+        models_used:       { type: array,   items: { type: string } }
+
+    FullReportRequest:
+      type: object
+      properties:
+        portfolio_session_id:
+          type: string
+          format: uuid
+          description: Preferred — full enriched book from POST /enrich
+        portfolio:         { $ref: '#/components/schemas/EnrichedPortfolio', nullable: true }
+        method:            { type: string, enum: [parametric, historical, montecarlo], default: parametric }
+        confidence:        { type: number, format: double, default: 0.99 }
+        horizon_days:      { type: integer, default: 1 }
+        stress_scenario:
+          type: string
+          enum: [2008_credit, covid_2020, rate_shock_200bps, oil_spike_50pct, custom]
+          default: 2008_credit
+        exclusion_filters: { type: array, items: { type: string }, default: [] }
+      anyOf:
+        - required: [portfolio_session_id]
+        - required: [portfolio]
+
+    FullReportResult:
+      type: object
+      required: [excel_report_path, summary_text, portfolio_name]
+      properties:
+        excel_report_path: { type: string, description: "Absolute path to master .xlsx under engine/output/reports" }
+        summary_text:      { type: string, description: "Plain-text summary for UI dialogs" }
+        portfolio_name:    { type: string }
+
+    # ── Fixed income ──
+    FixedIncomePosition:
+      type: object
+      required: [ticker, duration_modified, duration_macaulay, convexity, dv01, spread_sensitivity]
+      properties:
+        ticker:              { type: string }
+        duration_modified:   { type: number, format: double, description: "Modified duration in years" }
+        duration_macaulay:   { type: number, format: double, description: "Macaulay duration in years" }
+        convexity:           { type: number, format: double }
+        dv01:                { type: number, format: double, description: "Dollar value of 1bp in base currency" }
+        spread_sensitivity:  { type: number, format: double, description: "P&L impact of 1bp spread widening" }
+        ytm:                 { type: number, format: double, nullable: true, description: "Yield to maturity" }
+
+    FixedIncomeResult:
+      type: object
+      required: [positions, portfolio_duration, portfolio_convexity, portfolio_dv01]
+      properties:
+        positions:            { type: array, items: { $ref: '#/components/schemas/FixedIncomePosition' } }
+        portfolio_duration:   { type: number, format: double, description: "Weighted average modified duration" }
+        portfolio_convexity:  { type: number, format: double }
+        portfolio_dv01:       { type: number, format: double, description: "Total portfolio DV01" }
+        non_fixed_income_skipped: { type: array, items: { type: string },
+                                    description: "Tickers skipped because they are not FixedIncome asset class" }
+
+    # ── Benchmark / relative risk ──
+    BenchmarkResult:
+      type: object
+      required: [benchmark, tracking_error_ann, active_share, information_ratio,
+                 portfolio_beta, active_return_ann]
+      properties:
+        benchmark:            { type: string }
+        tracking_error_ann:   { type: number, format: double, description: "Annualised tracking error" }
+        active_share:         { type: number, format: double, description: "0–1, fraction of portfolio differing from benchmark" }
+        information_ratio:    { type: number, format: double }
+        portfolio_beta:       { type: number, format: double }
+        active_return_ann:    { type: number, format: double, description: "Annualised alpha vs benchmark" }
+        excess_returns_series: { type: array, items: { type: number, format: double },
+                                 description: "252 daily excess returns (portfolio minus benchmark)" }
+        per_position_active_weight:
+          type: array
+          items:
+            type: object
+            properties:
+              ticker:               { type: string }
+              portfolio_weight:     { type: number, format: double }
+              benchmark_weight:     { type: number, format: double }
+              active_weight:        { type: number, format: double }
+
+    # ── Correlation matrix ──
+    CorrelationMatrix:
+      type: object
+      required: [tickers, matrix]
+      properties:
+        tickers: { type: array, items: { type: string },
+                   description: "Ordered list of tickers — same order as matrix rows/columns" }
+        matrix:
+          type: array
+          items:
+            type: array
+            items: { type: number, format: double }
+          description: "NxN correlation matrix. matrix[i][j] is corr(tickers[i], tickers[j])"
+        eigenvalues: { type: array, items: { type: number, format: double }, nullable: true,
+                       description: "Sorted eigenvalues — useful for PCA / effective-N-assets" }
+        effective_n_assets: { type: number, format: double, nullable: true,
+                              description: "Diversification ratio: 1 / sum(w_i^2 * corr_contribution)" }
+
+    # ── VaR backtest ──
+    BacktestExceedance:
+      type: object
+      required: [date, actual_loss, var_estimate, exceeded]
+      properties:
+        date:         { type: string, format: date }
+        actual_loss:  { type: number, format: double }
+        var_estimate: { type: number, format: double }
+        exceeded:     { type: boolean }
+
+    BacktestResult:
+      type: object
+      required: [method, confidence, horizon_days, n_observations, n_exceedances,
+                 exceedance_rate, kupiec_pvalue, basel_zone, exceedances]
+      properties:
+        method:            { type: string, enum: [parametric, historical, montecarlo] }
+        confidence:        { type: number, format: double }
+        horizon_days:      { type: integer }
+        n_observations:    { type: integer }
+        n_exceedances:     { type: integer }
+        exceedance_rate:   { type: number, format: double }
+        kupiec_pvalue:     { type: number, format: double,
+                             description: "Kupiec proportion of failures test p-value" }
+        basel_zone:        { type: string, enum: [green, yellow, red],
+                             description: "Basel traffic light based on exceedance count over 250 days" }
+        exceedances:       { type: array, items: { $ref: '#/components/schemas/BacktestExceedance' } }
+
+    # ── FX exposure ──
+    CurrencyExposure:
+      type: object
+      required: [currency, market_value, weight, var_contribution]
+      properties:
+        currency:         { type: string }
+        market_value:     { type: number, format: double, description: "In base currency" }
+        weight:           { type: number, format: double }
+        var_contribution: { type: number, format: double, description: "FX VaR contribution in base currency" }
+
+    FxResult:
+      type: object
+      required: [base_currency, exposures, total_fx_var, largest_exposure_currency]
+      properties:
+        base_currency:              { type: string }
+        exposures:                  { type: array, items: { $ref: '#/components/schemas/CurrencyExposure' } }
+        total_fx_var:               { type: number, format: double,
+                                      description: "Total portfolio FX VaR (1-day, 95%) in base currency" }
+        largest_exposure_currency:  { type: string }
+        hedging_recommendations:
+          type: array
+          items:
+            type: object
+            properties:
+              currency:     { type: string }
+              notional:     { type: number, format: double }
+              suggestion:   { type: string }
+
+    # ── What-if ──
+    WhatIfPosition:
+      type: object
+      description: "A position change for what-if analysis. Set quantity to 0 to remove. New tickers will be enriched."
+      required: [ticker, action]
+      properties:
+        ticker:      { type: string }
+        action:      { type: string, enum: [add, modify, remove] }
+        asset_class: { type: string, enum: [Equity, FixedIncome, Commodity, Cash], nullable: true }
+        quantity:    { type: number, format: double, nullable: true }
+        cost_price:  { type: number, format: double, nullable: true }
+        currency:    { type: string, nullable: true }
+        sector:      { type: string, nullable: true }
+        country:     { type: string, nullable: true }
+
+    WhatIfRequest:
+      type: object
+      required: [base_portfolio, changes, metrics_to_run]
+      properties:
+        base_portfolio: { $ref: '#/components/schemas/EnrichedPortfolio' }
+        changes:        { type: array, items: { $ref: '#/components/schemas/WhatIfPosition' } }
+        metrics_to_run:
+          type: array
+          items: { type: string, enum: [var, greeks, stress, sustainability, correlation, fx, fixed_income] }
+          description: "Which models to re-run on the modified portfolio"
+        var_params:
+          type: object
+          nullable: true
+          properties:
+            method:       { type: string, enum: [parametric, historical, montecarlo], default: parametric }
+            confidence:   { type: number, format: double, default: 0.99 }
+            horizon_days: { type: integer, default: 1 }
+        stress_scenario: { type: string, nullable: true }
+
+    WhatIfResult:
+      type: object
+      required: [modified_portfolio, delta_market_value, delta_var, results]
+      properties:
+        modified_portfolio: { $ref: '#/components/schemas/EnrichedPortfolio' }
+        delta_market_value: { type: number, format: double, description: "Change in total market value" }
+        delta_var:          { type: number, format: double, nullable: true,
+                              description: "Change in portfolio VaR vs base portfolio" }
+        results:
+          type: object
+          description: "Keyed by metric name (var, greeks, etc.) — same schemas as standalone endpoints"
+          additionalProperties: true
+
+    # ── Health ──
+    HealthResponse:
+      type: object
+      required: [status, version]
+      properties:
+        status:  { type: string, example: ok }
+        version: { type: string, example: "1.0.0" }
+
+    # ── Shared error ──
+    ErrorResponse:
+      type: object
+      required: [detail]
+      properties:
+        detail: { type: string }
+
+# ─────────────────────────────────────────────
+# Paths
+# ─────────────────────────────────────────────
+paths:
+
+  /health:
+    get:
+      operationId: getHealth
+      summary: Engine health check
+      tags: [System]
+      responses:
+        '200':
+          description: Engine is running
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HealthResponse' }
+
+  /enrich:
+    post:
+      operationId: enrichPortfolio
+      summary: Enrich raw positions with live market data
+      tags: [Data]
+      parameters:
+        - name: response_detail
+          in: query
+          schema:
+            type: string
+            enum: [display, full]
+            default: display
+          description: >
+            display (default) — slim portfolio for C# blotter; engine stores full book.
+            full — includes returns_252d and options_chain (tools/debug).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [positions, base_currency, portfolio_name]
+              properties:
+                portfolio_name: { type: string }
+                base_currency:  { type: string }
+                benchmark:      { type: string, nullable: true }
+                positions: { type: array, items: { $ref: '#/components/schemas/RawPosition' } }
+      responses:
+        '200':
+          description: Enrich result with session id; portfolio shape depends on response_detail
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EnrichResponse' }
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /nlq:
+    post:
+      operationId: runNlq
+      summary: Natural language risk query — routed by Claude
+      tags: [NLQ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/NlqRequest' }
+      responses:
+        '200':
+          description: NLQ result with topline number, formula, explanation, and Excel path
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/NlqResult' }
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+        '502':
+          description: Claude API error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /risk/var:
+    post:
+      operationId: runVar
+      summary: Value-at-Risk and CVaR calculation
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                portfolio_session_id:
+                  type: string
+                  format: uuid
+                  description: Preferred — full enriched book from POST /enrich (engine memory, 4h TTL)
+                portfolio:    { $ref: '#/components/schemas/EnrichedPortfolio', nullable: true }
+                method:       { type: string, enum: [parametric, historical, montecarlo] }
+                confidence:   { type: number, format: double, example: 0.99 }
+                horizon_days: { type: integer, example: 1 }
+                n_sims:       { type: integer, default: 10000, description: "Monte Carlo paths" }
+              required: [method, confidence, horizon_days]
+              anyOf:
+                - required: [portfolio_session_id]
+                - required: [portfolio]
+      responses:
+        '200':
+          description: VaR result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/VarResult' }
+
+  /risk/greeks:
+    post:
+      operationId: runGreeks
+      summary: Delta, Gamma, Vega, Theta, Rho — Black-Scholes for options, synthetic finite-difference for equities
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio]
+              properties:
+                portfolio: { $ref: '#/components/schemas/EnrichedPortfolio' }
+      responses:
+        '200':
+          description: Greeks result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PortfolioGreeks' }
+
+  /risk/stress:
+    post:
+      operationId: runStress
+      summary: Named or custom scenario stress test
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio, scenario]
+              properties:
+                portfolio: { $ref: '#/components/schemas/EnrichedPortfolio' }
+                scenario:
+                  type: string
+                  enum: [2008_credit, covid_2020, rate_shock_200bps, oil_spike_50pct, custom]
+                custom_shocks:
+                  type: object
+                  nullable: true
+                  description: "Map of asset_class or sector → decimal shock (e.g. {'Equity': -0.35}). Populated by the Custom Scenario dialog or parsed from NLQ."
+                  additionalProperties: { type: number, format: double }
+      responses:
+        '200':
+          description: Stress test result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/StressResult' }
+
+  /risk/sustainability:
+    post:
+      operationId: runSustainability
+      summary: ESG scoring, carbon VaR, Paris alignment, exclusion checks
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio]
+              properties:
+                portfolio:          { $ref: '#/components/schemas/EnrichedPortfolio' }
+                exclusion_filters:  { type: array, items: { type: string }, default: [] }
+                include_carbon_var: { type: boolean, default: true }
+                carbon_price_shock: { type: number, format: double, default: 50.0,
+                                      description: "Carbon price increase in $/tCO2e" }
+                run_exclusion_check: { type: boolean, default: true }
+      responses:
+        '200':
+          description: Sustainability analysis
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SustainabilityResult' }
+
+  /risk/garch:
+    post:
+      operationId: runGarch
+      summary: GARCH(1,1) volatility model for a single ticker
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio, ticker]
+              properties:
+                portfolio: { $ref: '#/components/schemas/EnrichedPortfolio' }
+                ticker:    { type: string, example: AAPL }
+      responses:
+        '200':
+          description: GARCH result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GarchResult' }
+        '404':
+          description: Ticker not in portfolio
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /risk/full-report:
+    post:
+      operationId: runFullReport
+      summary: Master risk workbook — VaR, Greeks, sustainability, stress, with charts
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/FullReportRequest' }
+      responses:
+        '200':
+          description: Full report generated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FullReportResult' }
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /risk/fixed_income:
+    post:
+      operationId: runFixedIncome
+      summary: Duration, convexity, DV01, and spread sensitivity for fixed income positions
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio]
+              properties:
+                portfolio: { $ref: '#/components/schemas/EnrichedPortfolio' }
+      responses:
+        '200':
+          description: Fixed income analytics
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FixedIncomeResult' }
+
+  /risk/benchmark:
+    post:
+      operationId: runBenchmark
+      summary: Tracking error, active share, beta, information ratio vs benchmark
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio]
+              properties:
+                portfolio:  { $ref: '#/components/schemas/EnrichedPortfolio' }
+                benchmark:  { type: string, example: SPY,
+                              description: "Override benchmark ticker (defaults to portfolio.benchmark)" }
+                window_days: { type: integer, default: 252 }
+      responses:
+        '200':
+          description: Benchmark comparison
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BenchmarkResult' }
+        '422':
+          description: No benchmark configured
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  /risk/correlation:
+    post:
+      operationId: runCorrelation
+      summary: Return correlation matrix and diversification metrics for the portfolio
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio]
+              properties:
+                portfolio:         { $ref: '#/components/schemas/EnrichedPortfolio' }
+                include_eigenvalues: { type: boolean, default: true }
+                window_days:         { type: integer, default: 252 }
+      responses:
+        '200':
+          description: Correlation matrix
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CorrelationMatrix' }
+
+  /risk/backtest:
+    post:
+      operationId: runBacktest
+      summary: VaR model backtesting — Kupiec test and Basel traffic light
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio, method, confidence, horizon_days]
+              properties:
+                portfolio:    { $ref: '#/components/schemas/EnrichedPortfolio' }
+                method:       { type: string, enum: [parametric, historical, montecarlo] }
+                confidence:   { type: number, format: double, example: 0.99 }
+                horizon_days: { type: integer, example: 1 }
+                window_days:  { type: integer, default: 252,
+                                description: "Number of historical days to backtest over" }
+      responses:
+        '200':
+          description: Backtest result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BacktestResult' }
+
+  /risk/fx:
+    post:
+      operationId: runFx
+      summary: FX and currency exposure breakdown with VaR contribution
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [portfolio]
+              properties:
+                portfolio:    { $ref: '#/components/schemas/EnrichedPortfolio' }
+                confidence:   { type: number, format: double, default: 0.95 }
+                horizon_days: { type: integer, default: 1 }
+      responses:
+        '200':
+          description: FX exposure breakdown
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/FxResult' }
+
+  /risk/whatif:
+    post:
+      operationId: runWhatIf
+      summary: What-if scenario — apply position changes and re-run selected risk models
+      tags: [Risk]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/WhatIfRequest' }
+      responses:
+        '200':
+          description: What-if result with modified portfolio and re-run metrics
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/WhatIfResult' }

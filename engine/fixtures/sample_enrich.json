@@ -1,0 +1,25 @@
+{
+  "portfolio_name": "Demo Portfolio",
+  "base_currency": "USD",
+  "benchmark": "SPY",
+  "positions": [
+    {
+      "ticker": "AAPL",
+      "asset_class": "Equity",
+      "quantity": 100,
+      "cost_price": 150.0,
+      "currency": "USD",
+      "sector": "Technology",
+      "country": "US"
+    },
+    {
+      "ticker": "MSFT",
+      "asset_class": "Equity",
+      "quantity": 50,
+      "cost_price": 380.0,
+      "currency": "USD",
+      "sector": "Technology",
+      "country": "US"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+<UserControl x:Class="Riskbot.App.Views.Treemap.SquarifiedTreemapPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent"
+             SizeChanged="OnSizeChanged">
+    <Grid>
+        <Canvas x:Name="ChartCanvas" ClipToBounds="True"/>
+    </Grid>
+</UserControl>

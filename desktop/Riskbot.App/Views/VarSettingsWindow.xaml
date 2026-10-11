@@ -1,0 +1,43 @@
+<Window x:Class="Riskbot.App.Views.VarSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VaR Settings"
+        Height="300" Width="380"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource ShellBackground}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource PanelHeader}" Text="VaR PARAMETERS" Margin="0,0,0,16"/>
+
+        <TextBlock Grid.Row="1" Style="{StaticResource FieldLabel}" Text="Method"/>
+        <ComboBox x:Name="MethodBox" Grid.Row="2" Margin="0,0,0,14" SelectedIndex="0">
+            <ComboBoxItem Content="parametric"/>
+            <ComboBoxItem Content="historical"/>
+            <ComboBoxItem Content="montecarlo"/>
+        </ComboBox>
+
+        <TextBlock Grid.Row="3" Style="{StaticResource FieldLabel}" Text="Confidence (%)"/>
+        <TextBox x:Name="ConfidenceBox" Grid.Row="4" Height="30" VerticalContentAlignment="Center"
+                 FontFamily="{StaticResource MonoFont}" Text="99" Margin="0,0,0,14"/>
+
+        <TextBlock Grid.Row="5" Style="{StaticResource FieldLabel}" Text="Horizon (days)"/>
+        <TextBox x:Name="HorizonBox" Grid.Row="6" Height="30" VerticalContentAlignment="Center"
+                 FontFamily="{StaticResource MonoFont}" Text="1"/>
+
+        <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Cancel" Width="80" Margin="0,0,8,0" IsCancel="True"/>
+            <Button Content="OK" Width="80" Style="{StaticResource AccentButton}" IsDefault="True" Click="OnOk"/>
+        </StackPanel>
+    </Grid>
+</Window>

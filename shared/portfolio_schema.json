@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RiskbotPortfolioFile",
+  "description": "Schema for the .xlsx portfolio file read by PortfolioFileManager. Sheet 1 = Holdings, Sheet 2 = Metadata.",
+  "type": "object",
+  "required": ["holdings", "metadata"],
+  "properties": {
+    "holdings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["Ticker", "AssetClass", "Quantity", "CostPrice", "Currency"],
+        "properties": {
+          "Date":        { "type": "string", "format": "date" },
+          "Ticker":      { "type": "string", "minLength": 1, "maxLength": 20 },
+          "ISIN":        { "type": ["string", "null"], "pattern": "^[A-Z]{2}[A-Z0-9]{10}$" },
+          "AssetClass":  { "type": "string", "enum": ["Equity", "FixedIncome", "Commodity", "Cash"] },
+          "Quantity":    { "type": "number" },
+          "CostPrice":   { "type": "number", "minimum": 0 },
+          "Currency":    { "type": "string", "pattern": "^[A-Z]{3}$" },
+          "Sector":      { "type": ["string", "null"] },
+          "Country":     { "type": ["string", "null"], "pattern": "^[A-Z]{2}$" },
+          "ESGOverride": { "type": ["number", "null"], "minimum": 0, "maximum": 100 }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["PortfolioName", "BaseCurrency"],
+      "properties": {
+        "PortfolioName":    { "type": "string" },
+        "BaseCurrency":     { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "Benchmark":        { "type": ["string", "null"] },
+        "VaRLimit":         { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "MaxConcentration": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "EsgMinScore":      { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "ExclusionFilters": {
+          "type": ["string", "null"],
+          "description": "Comma-separated: optional presets (weapons,tobacco,fossil_fuels,gambling), tickers (PLTR), name:name_keyword, sector:keyword. Prefer Risk → ESG & Exclusion Preferences for app-wide settings."
+        }
+      }
+    }
+  }
+}

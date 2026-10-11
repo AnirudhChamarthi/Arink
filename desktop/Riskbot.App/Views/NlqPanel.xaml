@@ -1,0 +1,61 @@
+<UserControl x:Class="Riskbot.App.Views.NlqPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Background="{StaticResource PanelBackground}"
+            BorderBrush="{StaticResource BorderBrushDark}"
+            BorderThickness="1,1,1,0"
+            Padding="10,8"
+            Margin="0,6,0,0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Style="{StaticResource PanelHeader}"
+                       Text="NATURAL LANGUAGE QUERY"
+                       Margin="0,0,0,6"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <TextBox x:Name="QueryBox"
+                             Height="34"
+                             VerticalContentAlignment="Center"
+                             Padding="10,0"
+                             MaxLength="4000"
+                             FontFamily="{StaticResource UiFont}"
+                             FontSize="13"
+                             IsEnabled="{Binding IsEnabled}"
+                             Text="{Binding QueryText, UpdateSourceTrigger=PropertyChanged}"
+                             KeyDown="OnQueryKeyDown"/>
+                    <TextBlock IsHitTestVisible="False"
+                               Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               Text="{Binding HintText}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource HintText}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding QueryText}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+                <Button Grid.Column="1"
+                        Content="RUN"
+                        Style="{StaticResource AccentButton}"
+                        Width="88"
+                        Height="34"
+                        Margin="10,0,0,0"
+                        Command="{Binding SendQueryCommand}"
+                        IsEnabled="{Binding CanSend}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

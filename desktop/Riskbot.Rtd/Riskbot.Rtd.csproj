@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <ExcelDnaCreate32BitAddIn>true</ExcelDnaCreate32BitAddIn>
+    <ExcelDnaCreate64BitAddIn>true</ExcelDnaCreate64BitAddIn>
+    <ExcelDnaPublishPath>$(OutputPath)</ExcelDnaPublishPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ExcelDna.AddIn" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Riskbot.RtdBridge\Riskbot.RtdBridge.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Riskbot.Rtd.dna" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,169 @@
+<UserControl x:Class="Riskbot.App.Views.BlotterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="FlashCell" TargetType="DataGridCell">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="{x:Null}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.Ticker" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="Ticker">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.Name" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="Name">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.CurrentPrice" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="CurrentPrice">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.MarketValue" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="MarketValue">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.Pnl" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="Pnl">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.PnlPercent" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="PnlPercent">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.WeightPercent" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="WeightPercent">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.Beta" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="Beta">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.EsgScore" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="EsgScore">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Flash.CarbonIntensity" TargetType="DataGridCell" BasedOn="{StaticResource FlashCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ActiveFlashKey}" Value="CarbonIntensity">
+                    <Setter Property="Background" Value="{Binding FlashBackground}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="{StaticResource PanelBackground}"
+            BorderBrush="{StaticResource BorderBrushDark}"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Background="{StaticResource SurfaceBackground}"
+                    BorderBrush="{StaticResource BorderBrushDark}"
+                    BorderThickness="0,0,0,1"
+                    Padding="10,6">
+                <DockPanel>
+                    <TextBlock Style="{StaticResource PanelHeader}"
+                               DockPanel.Dock="Left"
+                               Text="POSITIONS"
+                               VerticalAlignment="Center"/>
+                    <TextBlock DockPanel.Dock="Right"
+                               Text="{Binding StatusText}"
+                               Foreground="{StaticResource TextSecondary}"
+                               FontFamily="{StaticResource MonoFont}"
+                               FontSize="11"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"/>
+                </DockPanel>
+            </Border>
+
+            <DataGrid x:Name="BlotterGrid"
+                      Grid.Row="1"
+                      Margin="0"
+                      ItemsSource="{Binding Rows}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      CanUserResizeRows="False"
+                      EnableRowVirtualization="True"
+                      EnableColumnVirtualization="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      RowHeaderWidth="0">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasBreach}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                <Setter Property="BorderThickness" Value="3,0,0,0"/>
+                                <Setter Property="ToolTip" Value="{Binding BreachSummary}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource AccentSecondary}"/>
+                                <Setter Property="BorderThickness" Value="3,0,0,0"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="TICKER" Binding="{Binding Ticker}" Width="72"
+                                        CellStyle="{StaticResource Flash.Ticker}"/>
+                    <DataGridTextColumn Header="NAME" Binding="{Binding Name}" Width="130" CellStyle="{StaticResource Flash.Name}"/>
+                    <DataGridTextColumn Header="CLASS" Binding="{Binding AssetClass}" Width="72"/>
+                    <DataGridTextColumn Header="SECTOR" Binding="{Binding Sector}" Width="96"/>
+                    <DataGridTextColumn Header="QTY" Binding="{Binding Quantity, StringFormat=N0}" Width="64"/>
+                    <DataGridTextColumn Header="COST" Binding="{Binding CostPrice, StringFormat=N2}" Width="64"/>
+                    <DataGridTextColumn Header="LAST" Binding="{Binding CurrentPrice, StringFormat=N2}" Width="72"
+                                        CellStyle="{StaticResource Flash.CurrentPrice}"/>
+                    <DataGridTextColumn Header="MKT VAL" Binding="{Binding MarketValue, StringFormat=N0}" Width="80"
+                                        CellStyle="{StaticResource Flash.MarketValue}"/>
+                    <DataGridTextColumn Header="P&amp;L" Binding="{Binding Pnl, StringFormat=N0}" Width="72"
+                                        CellStyle="{StaticResource Flash.Pnl}"/>
+                    <DataGridTextColumn Header="P&amp;L %" Binding="{Binding PnlPercent, StringFormat=N2}" Width="60"
+                                        CellStyle="{StaticResource Flash.PnlPercent}"/>
+                    <DataGridTextColumn Header="WT %" Binding="{Binding WeightPercent, StringFormat=N2}" Width="56"
+                                        CellStyle="{StaticResource Flash.WeightPercent}"/>
+                    <DataGridTextColumn Header="BETA" Binding="{Binding Beta, StringFormat=N2}" Width="52"
+                                        CellStyle="{StaticResource Flash.Beta}"/>
+                    <DataGridTextColumn Header="ESG" Binding="{Binding EsgScore, StringFormat=N0}" Width="48"
+                                        CellStyle="{StaticResource Flash.EsgScore}"/>
+                    <DataGridTextColumn Header="CO2" Binding="{Binding CarbonIntensity, StringFormat=N0}" Width="48"
+                                        CellStyle="{StaticResource Flash.CarbonIntensity}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Border>
+</UserControl>

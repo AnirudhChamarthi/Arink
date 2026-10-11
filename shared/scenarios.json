@@ -1,0 +1,45 @@
+{
+  "2008_credit": {
+    "description": "Global financial crisis — equity and credit shock",
+    "shocks": {
+      "Equity": -0.35,
+      "FixedIncome": -0.05,
+      "Commodity": -0.20,
+      "Cash": 0.0,
+      "Financials": -0.50,
+      "Energy": -0.40
+    }
+  },
+  "covid_2020": {
+    "description": "COVID-19 market crash — growth and travel hit hardest",
+    "shocks": {
+      "Equity": -0.30,
+      "FixedIncome": 0.02,
+      "Commodity": -0.25,
+      "Cash": 0.0,
+      "Technology": -0.15,
+      "Energy": -0.45
+    }
+  },
+  "rate_shock_200bps": {
+    "description": "Parallel +200 bps rate shock",
+    "shocks": {
+      "Equity": -0.12,
+      "FixedIncome": -0.08,
+      "Commodity": -0.05,
+      "Cash": 0.0,
+      "Financials": -0.15
+    }
+  },
+  "oil_spike_50pct": {
+    "description": "Crude oil +50% — energy up, consumers down",
+    "shocks": {
+      "Equity": -0.05,
+      "FixedIncome": -0.02,
+      "Commodity": 0.15,
+      "Cash": 0.0,
+      "Energy": 0.35,
+      "Consumer": -0.08
+    }
+  }
+}

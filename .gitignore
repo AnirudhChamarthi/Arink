@@ -1,0 +1,47 @@
+# Python
+engine/.cache/
+engine/output/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Internal build notes and prompts (not for publication)
+steps.md
+step*.md
+prompt.md
+
+# .NET
+bin/
+obj/
+publish/
+TestResults/
+*.user
+*.suo
+*.DotSettings.user
+
+# Excel lock files
+~$*
+
+# IDE
+.vs/
+.idea/
+.vscode/
+.cursor/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Logs
+*.log

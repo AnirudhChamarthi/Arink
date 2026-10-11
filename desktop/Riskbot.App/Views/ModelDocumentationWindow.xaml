@@ -1,0 +1,31 @@
+<Window x:Class="Riskbot.App.Views.ModelDocumentationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Model Documentation"
+        Height="540" Width="660"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="{StaticResource ShellBackground}">
+    <DockPanel Margin="18">
+        <TextBlock DockPanel.Dock="Top"
+                   Style="{StaticResource PanelHeader}"
+                   Text="MODELS &amp; API"
+                   Margin="0,0,0,12"/>
+        <Button DockPanel.Dock="Bottom"
+                Content="Close"
+                Width="80"
+                HorizontalAlignment="Right"
+                Margin="0,14,0,0"
+                IsDefault="True"
+                IsCancel="True"
+                Click="OnClose"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <TextBlock x:Name="DocText"
+                       Foreground="{StaticResource TextSecondary}"
+                       FontFamily="{StaticResource UiFont}"
+                       FontSize="12"
+                       TextWrapping="Wrap"
+                       LineHeight="20"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

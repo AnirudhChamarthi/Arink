@@ -1,0 +1,116 @@
+﻿<Window x:Class="Riskbot.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:Riskbot.App.Views"
+        Title="{Binding WindowTitle}"
+        Height="820" Width="1320" MinHeight="640" MinWidth="960"
+        Background="{StaticResource ShellBackground}"
+        FontFamily="{StaticResource UiFont}">
+    <DockPanel LastChildFill="True">
+        <!-- Blue status strip -->
+        <Border DockPanel.Dock="Top"
+                Background="{StaticResource StatusBarBackground}"
+                BorderBrush="{StaticResource AccentBrush}"
+                BorderThickness="0,0,0,2"
+                Padding="10,5">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left"
+                           Text="RISKBOT"
+                           FontWeight="Bold"
+                           FontSize="13"
+                           Foreground="{StaticResource StatusBarForeground}"
+                           VerticalAlignment="Center"
+                           Margin="0,0,16,0"/>
+                <TextBlock DockPanel.Dock="Left"
+                           Text="{Binding WindowTitle}"
+                           FontWeight="SemiBold"
+                           FontSize="12"
+                           Foreground="{StaticResource StatusBarForeground}"
+                           VerticalAlignment="Center"
+                           Opacity="0.92"/>
+                <TextBlock DockPanel.Dock="Right"
+                           Text="{Binding EngineStatus}"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="11"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource StatusBarForeground}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Opacity" Value="0.85"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEngineOnline}" Value="True">
+                                    <Setter Property="Opacity" Value="1"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </DockPanel>
+        </Border>
+
+        <Menu DockPanel.Dock="Top" Background="{StaticResource PanelBackground}">
+            <MenuItem Header="_FILE">
+                <MenuItem Header="_New Portfolio…" Command="{Binding NewPortfolioCommand}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="_Open Portfolio…" Command="{Binding OpenPortfolioCommand}" InputGestureText="Ctrl+O"/>
+                <MenuItem Header="Recent Files" ItemsSource="{Binding RecentFiles}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                            <Setter Property="Header" Value="{Binding DisplayName}"/>
+                            <Setter Property="ToolTip" Value="{Binding Path}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S"/>
+                <MenuItem Header="Save _As…" Command="{Binding SaveAsCommand}"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_VIEW">
+                <MenuItem Header="Toggle Treemap Mode" Command="{Binding ToggleTreemapModeCommand}"/>
+                <MenuItem Header="Show/Hide Result Panel" Command="{Binding ToggleResultPanelCommand}"/>
+                <MenuItem Header="Refresh Market Data" Command="{Binding RefreshMarketDataCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_RISK">
+                <MenuItem Header="Run Full Risk Report" Command="{Binding RunFullRiskReportCommand}"/>
+                <MenuItem Header="Stress Test">
+                    <MenuItem Header="2008 Credit Crisis" Command="{Binding RunStressTestCommand}" CommandParameter="2008_credit"/>
+                    <MenuItem Header="COVID-19 (2020)" Command="{Binding RunStressTestCommand}" CommandParameter="covid_2020"/>
+                    <MenuItem Header="Rate Shock +200 bps" Command="{Binding RunStressTestCommand}" CommandParameter="rate_shock_200bps"/>
+                    <MenuItem Header="Oil Spike +50%" Command="{Binding RunStressTestCommand}" CommandParameter="oil_spike_50pct"/>
+                </MenuItem>
+                <MenuItem Header="VaR Settings…" Command="{Binding OpenVarSettingsCommand}"/>
+                <MenuItem Header="ESG &amp; Exclusion Preferences…" Command="{Binding OpenEsgPreferencesCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_HELP">
+                <MenuItem Header="Excel RTD Formulas…" Command="{Binding ShowRtdFormulasCommand}"/>
+                <MenuItem Header="API Key Settings…" Command="{Binding OpenApiKeySettingsCommand}"/>
+                <MenuItem Header="About Riskbot" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="Model Documentation…" Command="{Binding OpenModelDocumentationCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid Margin="6,4,6,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <views:BlotterView x:Name="Blotter" Grid.Row="0" Grid.Column="0"/>
+            <Border Grid.Row="0" Grid.Column="1" Background="{StaticResource BorderBrushDark}"/>
+            <views:TreemapView x:Name="Treemap" Grid.Row="0" Grid.Column="2"/>
+            <views:NlqPanel x:Name="NlqBar" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"/>
+            <views:ResultPanel x:Name="Results" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                               Visibility="{Binding IsResultPanelVisible, Converter={StaticResource BoolToVis}}"/>
+        </Grid>
+    </DockPanel>
+</Window>
