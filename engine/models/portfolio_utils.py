@@ -45,15 +45,23 @@ def position_weights(portfolio: EnrichedPortfolio) -> list[tuple[EnrichedPositio
 
 
 def returns_matrix(portfolio: EnrichedPortfolio, tickers: list[str]) -> np.ndarray:
+    """Return an ``(n_days, n_assets)`` matrix of daily returns.
+
+    Histories of different length (e.g. a recent listing) are aligned on their most recent days
+    and truncated to the shortest available history, so every row is the same calendar day.
+    Assets with no history (cash, say) contribute zeros.
+    """
     by_ticker = {p.ticker.upper(): np.array(p.returns_252d, dtype=float) for p in portfolio.positions}
-    rows = []
-    for ticker in tickers:
-        series = by_ticker.get(ticker.upper())
+    series_list = [by_ticker.get(t.upper()) for t in tickers]
+    lengths = [min(len(s), 252) for s in series_list if s is not None and len(s) > 0]
+    n = min(lengths) if lengths else 252
+    columns = []
+    for series in series_list:
         if series is None or len(series) == 0:
-            rows.append(np.zeros(252))
+            columns.append(np.zeros(n))
         else:
-            rows.append(series[-252:])
-    return np.column_stack(rows)
+            columns.append(series[-n:])
+    return np.column_stack(columns)
 
 
 def weight_vector(portfolio: EnrichedPortfolio) -> tuple[list[str], np.ndarray]:
