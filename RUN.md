@@ -13,8 +13,8 @@ Riskbot is a **WPF desktop app** plus a **local Python engine** on `http://127.0
 ## 1. One-time setup
 
 ```powershell
-git clone <repository-url> SustainableC
-cd SustainableC
+git clone https://github.com/AnirudhChamarthi/Arink.git
+cd Arink
 
 # Python engine (a virtual environment is recommended)
 python -m venv .venv

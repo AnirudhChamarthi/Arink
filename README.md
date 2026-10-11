@@ -7,8 +7,8 @@ Riskbot is a **portfolio risk workstation**: a Windows WPF desktop client talks 
 Requires **Windows**, the **.NET 8 SDK**, and **Python 3.11+**.
 
 ```powershell
-git clone <repository-url> SustainableC
-cd SustainableC
+git clone https://github.com/AnirudhChamarthi/Arink.git
+cd Arink
 
 pip install -r engine\requirements.txt
 copy .env.example .env          # optional: add ANTHROPIC_API_KEY for Claude-powered questions
