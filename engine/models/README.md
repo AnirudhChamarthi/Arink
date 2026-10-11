@@ -50,3 +50,18 @@ C# does **not** reimplement these formulas; [`PortfolioRiskService`](../../deskt
 [`tests/test_var.py`](../tests/test_var.py), [`test_step7.py`](../tests/test_step7.py), [`test_sustainability.py`](../tests/test_sustainability.py), [`test_exclusion_policy.py`](../tests/test_exclusion_policy.py) — fixed seeds where randomness applies.
 
 Parent: [../README.md](../README.md)
+
+## Risk modes (`risk_modes.py`)
+
+Opt-in **optimistic / normal / cautious** presets for parametric VaR, expected shortfall, stress
+severity and the carbon-price shock. A mode changes how conservative the *assumptions* are, not
+what is measured; each parameter maps to one term in the maths (see the module docstring):
+
+| Mode | Confidence | Volatility | Correlation stress `k` | Tails | Stress multiplier | Carbon $/t |
+|------|-----------|------------|------------------------|-------|-------------------|------------|
+| optimistic | 95% | min(sample, EWMA) | 0 | normal | 0.75 | 25 |
+| normal | 99% | EWMA (λ = 0.94) | 0 | normal | 1.0 | 50 |
+| cautious | 99.5% | max(sample, EWMA) | 0.30 | Student-t, ν = 5 | 1.5 | 100 |
+
+Entry points: `moded_parametric_var`, `run_stress_with_mode`, `run_sustainability_with_mode`.
+Not yet wired into the HTTP API or the OpenAPI contract.
