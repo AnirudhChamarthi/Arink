@@ -2,10 +2,17 @@
 
 from __future__ import annotations
 
+import logging
+import math
+
 import numpy as np
 from scipy import stats
 
 from schemas.contract import ArmaOrder, EnrichedPortfolio, GarchResult
+
+logger = logging.getLogger(__name__)
+
+EWMA_LAMBDA = 0.94
 
 
 def run_garch(portfolio: EnrichedPortfolio, ticker: str) -> GarchResult:
@@ -22,8 +29,10 @@ def run_garch(portfolio: EnrichedPortfolio, ticker: str) -> GarchResult:
     try:
         return _fit_arch_garch(pos.ticker, returns)
     except ImportError:
+        logger.warning("GARCH for %s: 'arch' is not installed; using the EWMA fallback.", pos.ticker)
         return _ewma_fallback(pos.ticker, returns)
     except Exception as exc:
+        logger.warning("GARCH for %s failed (%s); using the EWMA fallback.", pos.ticker, exc)
         return _ewma_fallback(pos.ticker, returns, note=str(exc))
 
 
@@ -33,6 +42,8 @@ def _fit_arch_garch(ticker: str, returns: np.ndarray) -> GarchResult:
     pct_returns = returns * 100.0
     model = arch_model(pct_returns, vol="Garch", p=1, q=1, rescale=False)
     fit = model.fit(disp="off")
+    if fit.convergence_flag != 0:
+        raise RuntimeError(f"optimizer did not converge (flag {fit.convergence_flag})")
     params = fit.params
     omega = float(params.get("omega", 0.0))
     alpha = float(params.get("alpha[1]", 0.0))
@@ -58,26 +69,35 @@ def _fit_arch_garch(ticker: str, returns: np.ndarray) -> GarchResult:
 
 
 def _ewma_fallback(ticker: str, returns: np.ndarray, note: str = "") -> GarchResult:
-    """EWMA volatility when arch is unavailable or fit fails."""
-    lam = 0.94
+    """RiskMetrics EWMA volatility, reported as the GARCH(1,1) it is a special case of.
+
+    EWMA is GARCH(1,1) with omega = 0, alpha = 1 - lambda and beta = lambda, so those are the
+    parameters reported (they used to be an unrelated 0.1 / 0.85). Because alpha + beta = 1 and
+    omega = 0, the variance forecast is flat across horizons. The Gaussian log-likelihood is
+    computed from the EWMA variance path; no parameters are estimated, so AIC = BIC = -2 * LL.
+    ``arma_order`` is (0, 0) to mark this result as the fallback rather than a fitted model.
+    """
+    lam = EWMA_LAMBDA
     var = float(np.var(returns))
+    var = max(var, 1e-12)
+    log_lik = 0.0
     for r in returns:
-        var = lam * var + (1 - lam) * r * r
-    daily_vol = np.sqrt(max(var, 1e-12))
-    vol_series = [daily_vol * np.sqrt(1 + 0.01 * i) for i in range(10)]
-    vol_forecast_10d = float(vol_series[-1])
-    conditional_var_1d = float(daily_vol * stats.norm.ppf(0.99))
+        log_lik += -0.5 * (math.log(2 * math.pi) + math.log(var) + r * r / var)
+        var = max(lam * var + (1 - lam) * r * r, 1e-12)
+
+    daily_vol = math.sqrt(var)  # forecast for the next day, and (flat) for every day after
+    vol_series = [daily_vol] * 10
 
     return GarchResult(
         ticker=ticker,
-        omega=float(var * (1 - lam)),
-        alpha=0.1,
-        beta_param=0.85,
-        log_likelihood=0.0,
-        aic=0.0,
-        bic=0.0,
+        omega=0.0,
+        alpha=1.0 - lam,
+        beta_param=lam,
+        log_likelihood=float(log_lik),
+        aic=float(-2.0 * log_lik),
+        bic=float(-2.0 * log_lik),
         vol_forecast_series=vol_series,
-        vol_forecast_10d=vol_forecast_10d,
-        conditional_var_1d=conditional_var_1d,
+        vol_forecast_10d=daily_vol,
+        conditional_var_1d=float(daily_vol * stats.norm.ppf(0.99)),
         arma_order=ArmaOrder(p=0, q=0),
     )
