@@ -176,20 +176,33 @@ def _historical_contributions(
     var_decimal: float,
     horizon_days: int,
 ) -> list[VarContribution]:
+    """Tail-conditional (expected-shortfall) contributions.
+
+    Position i contributes the average of its own weighted loss over the scenarios in which the
+    portfolio loss is at or beyond VaR. These add up to the portfolio's expected shortfall, so
+    each share ``pct_of_total`` is that position's part of the tail loss and the shares sum to 1.
+    A hedge that gains when the portfolio is in the tail gets a negative share. (The previous
+    version used the average loss over *all* days, which says nothing about the tail.)
+    """
     R = returns_matrix(portfolio, tickers)
-    position_losses = -R
     if horizon_days > 1:
-        position_losses = position_losses * np.sqrt(horizon_days)
-    marginal = np.mean(position_losses, axis=0) * weights
-    total = float(np.sum(np.abs(marginal))) or 1.0
+        # same overlapping h-day sums as the portfolio return used for VaR itself
+        R = np.array([R[max(0, i - horizon_days + 1) : i + 1].sum(axis=0) for i in range(len(R))])
+    weighted = R * weights
+    losses = -weighted.sum(axis=1)
+    tail = losses >= var_decimal
+    if not tail.any():
+        return [VarContribution(ticker=t, var_contribution=0.0, pct_of_total=0.0) for t in tickers]
+
+    component = -weighted[tail].mean(axis=0)
+    total = float(component.sum())
+    if abs(total) < 1e-12:
+        return [VarContribution(ticker=t, var_contribution=0.0, pct_of_total=0.0) for t in tickers]
+
     contributions: list[VarContribution] = []
     for i, ticker in enumerate(tickers):
-        pct = float(abs(marginal[i]) / total)
+        pct = float(component[i] / total)
         contributions.append(
-            VarContribution(
-                ticker=ticker,
-                var_contribution=pct * var_decimal,
-                pct_of_total=pct,
-            )
+            VarContribution(ticker=ticker, var_contribution=pct * var_decimal, pct_of_total=pct)
         )
     return contributions
