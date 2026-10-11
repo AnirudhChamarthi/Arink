@@ -94,11 +94,9 @@ def montecarlo_var(
         cov = np.array([[float(cov)]])
     mean = np.mean(R, axis=0)
     rng = np.random.default_rng(42)
-    sims = rng.multivariate_normal(mean, cov, size=n_sims) @ weights
-    if horizon_days > 1:
-        sims = sims * np.sqrt(horizon_days)
-    else:
-        sims = sims * np.sqrt(horizon_days)
+    # h-day return of iid daily returns ~ N(h * mu, h * Sigma): the drift grows linearly in h and
+    # the volatility with sqrt(h). (Scaling the whole draw by sqrt(h) wrongly scaled the drift too.)
+    sims = rng.multivariate_normal(mean * horizon_days, cov * horizon_days, size=n_sims) @ weights
 
     losses = -sims
     var_decimal = float(np.quantile(losses, confidence))

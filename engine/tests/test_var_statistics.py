@@ -117,16 +117,11 @@ def test_montecarlo_var_converges_to_parametric_for_zero_mean_returns():
     assert mc == pytest.approx(parametric_var(pf, 0.99, 1).var, rel=0.03)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Known defect: montecarlo_var scales the whole simulated return, including the mean, by "
-        "sqrt(h). A drift scales linearly with h, so multi-day VaR is overstated when the mean "
-        "is positive and understated when it is negative."
-    ),
-)
-def test_montecarlo_multiday_var_scales_drift_linearly():
-    mu, sigma, h = 0.002, 0.01, 10
+@pytest.mark.parametrize("mu", [0.002, 0.0, -0.002])
+def test_montecarlo_multiday_var_scales_drift_linearly(mu):
+    # Regression test: the drift used to be scaled by sqrt(h) instead of h, overstating
+    # multi-day VaR for a positive mean and understating it for a negative one.
+    sigma, h = 0.01, 10
     r = np.random.default_rng(8).normal(0, sigma, 252)
     r = (r - r.mean()) / r.std(ddof=1) * sigma + mu  # exact sample mean and std
     pf = _portfolio(_position("A", r))
