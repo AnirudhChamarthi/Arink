@@ -124,3 +124,35 @@ See [tests/README.md](tests/README.md).
 | (repo `.env`) | Loaded by `main.py` via `python-dotenv` |
 
 Parent doc: [../README.md](../README.md) · Runbook: [../RUN.md](../RUN.md)
+
+## MCP server (Claude Desktop / Claude Code)
+
+`mcp_server.py` exposes read-only risk calculations over the Model Context Protocol, each
+returning the result plus a step-by-step math trace (formulas in LaTeX, substituted numbers,
+assumptions, an input hash for reproducibility).
+
+| Tool | Purpose |
+| --- | --- |
+| `var_trace` | Parametric VaR and expected shortfall, every step shown |
+| `stress_trace` | Named or custom stress scenario, with the shock lookup per position |
+| `list_stress_scenarios` | Available scenarios and their shocks |
+
+It also serves the model documentation as the resource `riskbot://docs/models`.
+
+Run locally over stdio (data stays on your machine):
+
+```bash
+cd engine && pip install -r requirements.txt && python mcp_server.py
+```
+
+Claude Desktop (`claude_desktop_config.json`):
+
+```json
+{ "mcpServers": { "riskbot": { "command": "python", "args": ["/path/to/Arink/engine/mcp_server.py"] } } }
+```
+
+Claude Code: `claude mcp add riskbot -- python /path/to/Arink/engine/mcp_server.py`
+
+Notes: portfolios must already contain daily returns (`returns_252d`); the server never calls
+the network or writes files. A shared, remote deployment would additionally need authentication,
+TLS, access control and audit logging, and is out of scope here.

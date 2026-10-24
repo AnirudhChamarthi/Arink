@@ -15,3 +15,4 @@ openpyxl>=3.1.5
 matplotlib>=3.9.0
 python-dotenv>=1.0.1
 arch>=7.0.0
+mcp>=2.0,<3
