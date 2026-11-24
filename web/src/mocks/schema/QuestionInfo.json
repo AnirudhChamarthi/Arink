@@ -1,0 +1,133 @@
+{
+  "$defs": {
+    "DatasetKind": {
+      "enum": [
+        "market",
+        "balance_sheet",
+        "climate"
+      ],
+      "title": "DatasetKind",
+      "type": "string"
+    },
+    "ExtraRun": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "model_id"
+      ],
+      "title": "ExtraRun",
+      "type": "object"
+    },
+    "GridSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "dimensions": {
+          "additionalProperties": {
+            "items": {},
+            "type": "array"
+          },
+          "description": "Parameter name -> values to vary (cartesian product).",
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "fixed": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Fixed",
+          "type": "object"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_id",
+        "dimensions"
+      ],
+      "title": "GridSpec",
+      "type": "object"
+    },
+    "QuestionId": {
+      "enum": [
+        "q1_market",
+        "q2_balance_sheet",
+        "q3_transition"
+      ],
+      "title": "QuestionId",
+      "type": "string"
+    },
+    "QuestionPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "extras": {
+          "description": "Models run once each (data quality, reverse stress).",
+          "items": {
+            "$ref": "#/$defs/ExtraRun"
+          },
+          "title": "Extras",
+          "type": "array"
+        },
+        "grid": {
+          "$ref": "#/$defs/GridSpec"
+        },
+        "max_variations": {
+          "default": 200,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Max Variations",
+          "type": "integer"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        }
+      },
+      "required": [
+        "question",
+        "grid"
+      ],
+      "title": "QuestionPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "dataset_kind": {
+      "$ref": "#/$defs/DatasetKind"
+    },
+    "default_plan": {
+      "$ref": "#/$defs/QuestionPlan"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "question": {
+      "$ref": "#/$defs/QuestionId"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "question",
+    "title",
+    "description",
+    "dataset_kind",
+    "default_plan"
+  ],
+  "title": "QuestionInfo",
+  "type": "object"
+}

@@ -1,0 +1,122 @@
+{
+  "$defs": {
+    "ControlStrength": {
+      "enum": [
+        "weak",
+        "adequate",
+        "strong"
+      ],
+      "title": "ControlStrength",
+      "type": "string"
+    },
+    "FactorEdit": {
+      "additionalProperties": false,
+      "properties": {
+        "control": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ControlStrength"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "factor_id": {
+          "title": "Factor Id",
+          "type": "string"
+        },
+        "impact": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Impact"
+        },
+        "likelihood": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Likelihood"
+        },
+        "rationale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rationale"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "factor_id",
+        "reason"
+      ],
+      "title": "FactorEdit",
+      "type": "object"
+    },
+    "ReviewDecision": {
+      "enum": [
+        "approve",
+        "reject"
+      ],
+      "title": "ReviewDecision",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "comment": {
+      "default": "",
+      "title": "Comment",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/ReviewDecision"
+    },
+    "factor_edits": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/FactorEdit"
+      },
+      "title": "Factor Edits",
+      "type": "array"
+    },
+    "reviewer": {
+      "minLength": 1,
+      "title": "Reviewer",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision",
+    "reviewer"
+  ],
+  "title": "ReviewSubmission",
+  "type": "object"
+}

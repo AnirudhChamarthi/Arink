@@ -1,0 +1,136 @@
+{
+  "assessment": {
+    "factors": [
+      {
+        "control": "adequate",
+        "description": "Placeholder.",
+        "evidence": [
+          {
+            "description": "fake",
+            "kind": "note",
+            "ref": "fake"
+          }
+        ],
+        "factor_id": "fake_factor",
+        "impact": 4,
+        "inherent": "high",
+        "likelihood": 3,
+        "name": "Fake factor",
+        "rationale": "Placeholder rationale.",
+        "residual": "medium",
+        "source": "analyst"
+      }
+    ],
+    "label": "judgment",
+    "method_note": "Fake assessor.",
+    "overall": "medium",
+    "overrides": [
+      {
+        "at": "2026-11-24T12:00:00Z",
+        "by": "analyst",
+        "factor_id": "fake_factor",
+        "field": "impact",
+        "new": 4,
+        "old": 3,
+        "reason": "example"
+      }
+    ],
+    "question": "q3_transition"
+  },
+  "comparison": {
+    "break_evens": [],
+    "flips": [],
+    "label_counts": {},
+    "method_spread": {},
+    "metric_ranges": {
+      "alignment_ratio": {
+        "max": 0.062459,
+        "median": 0.039361,
+        "min": 0.018534,
+        "n": 27,
+        "unit": "ratio"
+      },
+      "carbon_price_end": {
+        "max": 0.061459,
+        "median": 0.038361,
+        "min": 0.017534,
+        "n": 27,
+        "unit": "currency"
+      },
+      "estimated_share": {
+        "max": 0.063459,
+        "median": 0.040361,
+        "min": 0.019534,
+        "n": 27,
+        "unit": "fraction"
+      },
+      "financed_emissions": {
+        "max": 0.060459,
+        "median": 0.037361,
+        "min": 0.016534,
+        "n": 27,
+        "unit": "tCO2e"
+      },
+      "loss_amount": {
+        "max": 0.058459,
+        "median": 0.035361,
+        "min": 0.014534,
+        "n": 27,
+        "unit": "currency"
+      },
+      "loss_p05": {
+        "max": 0.056459,
+        "median": 0.033361,
+        "min": 0.012534,
+        "n": 27,
+        "unit": "fraction"
+      },
+      "loss_p95": {
+        "max": 0.057459,
+        "median": 0.034361,
+        "min": 0.013534,
+        "n": 27,
+        "unit": "fraction"
+      },
+      "loss_pct": {
+        "max": 0.055459,
+        "median": 0.032361,
+        "min": 0.011534,
+        "n": 27,
+        "unit": "fraction"
+      },
+      "waci": {
+        "max": 0.059459,
+        "median": 0.036361,
+        "min": 0.015534,
+        "n": 27,
+        "unit": "tCO2e_per_musd"
+      }
+    },
+    "question": "q3_transition",
+    "sensitivity": []
+  },
+  "headline": [
+    "Fake headline."
+  ],
+  "markdown": "# Run run-0003\n\nFAKE REPORT",
+  "run": {
+    "contract_version": "fake",
+    "created_at": "2026-11-24T12:00:00Z",
+    "dataset_name": "fake climate book",
+    "error": null,
+    "input_hash": "d9606ba779d8602185e988ac0263c3bc29d30c6d9b44b0a1bdad3817b716d491",
+    "n_variations": 28,
+    "question": "q3_transition",
+    "run_id": "run-0003",
+    "status": "approved",
+    "synthetic": true,
+    "updated_at": "2026-11-24T12:00:00Z"
+  },
+  "signoff": {
+    "at": "2026-11-24T12:00:00Z",
+    "comment": "",
+    "decision": "approve",
+    "reviewer": "analyst"
+  }
+}

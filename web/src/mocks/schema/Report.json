@@ -1,0 +1,638 @@
+{
+  "$defs": {
+    "BreakEven": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "found": {
+          "title": "Found",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Metric key from an extra run, starting with 'breakeven_'.",
+          "title": "Name",
+          "type": "string"
+        },
+        "trace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trace Id"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "unit",
+        "found",
+        "description"
+      ],
+      "title": "BreakEven",
+      "type": "object"
+    },
+    "Comparison": {
+      "additionalProperties": false,
+      "properties": {
+        "break_evens": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/BreakEven"
+          },
+          "title": "Break Evens",
+          "type": "array"
+        },
+        "flips": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ConclusionFlip"
+          },
+          "title": "Flips",
+          "type": "array"
+        },
+        "label_counts": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object"
+          },
+          "description": "Label -> value -> count.",
+          "title": "Label Counts",
+          "type": "object"
+        },
+        "method_spread": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Metric -> max/min across methods.",
+          "title": "Method Spread",
+          "type": "object"
+        },
+        "metric_ranges": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MetricRange"
+          },
+          "title": "Metric Ranges",
+          "type": "object"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        },
+        "sensitivity": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SensitivityRow"
+          },
+          "title": "Sensitivity",
+          "type": "array"
+        }
+      },
+      "required": [
+        "question",
+        "metric_ranges"
+      ],
+      "title": "Comparison",
+      "type": "object"
+    },
+    "ConclusionFlip": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "from_value": {
+          "title": "From Value",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "outcome_from": {
+          "title": "Outcome From",
+          "type": "string"
+        },
+        "outcome_to": {
+          "title": "Outcome To",
+          "type": "string"
+        },
+        "to_value": {
+          "title": "To Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "dimension",
+        "from_value",
+        "to_value",
+        "outcome_from",
+        "outcome_to",
+        "description"
+      ],
+      "title": "ConclusionFlip",
+      "type": "object"
+    },
+    "ControlStrength": {
+      "enum": [
+        "weak",
+        "adequate",
+        "strong"
+      ],
+      "title": "ControlStrength",
+      "type": "string"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "trace",
+            "finding",
+            "metric",
+            "dataset_field",
+            "note"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "ref": {
+          "description": "trace_id[/step], finding check, metric key, dataset field path, or free text.",
+          "title": "Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "ref",
+        "description"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "FactorSource": {
+      "enum": [
+        "rule",
+        "llm_draft",
+        "analyst",
+        "unassessed"
+      ],
+      "title": "FactorSource",
+      "type": "string"
+    },
+    "MetricRange": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "title": "Max",
+          "type": "number"
+        },
+        "median": {
+          "title": "Median",
+          "type": "number"
+        },
+        "min": {
+          "title": "Min",
+          "type": "number"
+        },
+        "n": {
+          "title": "N",
+          "type": "integer"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "unit",
+        "min",
+        "median",
+        "max",
+        "n"
+      ],
+      "title": "MetricRange",
+      "type": "object"
+    },
+    "Override": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "by": {
+          "title": "By",
+          "type": "string"
+        },
+        "factor_id": {
+          "title": "Factor Id",
+          "type": "string"
+        },
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "new": {
+          "title": "New"
+        },
+        "old": {
+          "title": "Old"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "factor_id",
+        "field",
+        "old",
+        "new",
+        "reason",
+        "by",
+        "at"
+      ],
+      "title": "Override",
+      "type": "object"
+    },
+    "QualitativeAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "factors": {
+          "items": {
+            "$ref": "#/$defs/QualitativeFactor"
+          },
+          "title": "Factors",
+          "type": "array"
+        },
+        "label": {
+          "const": "judgment",
+          "default": "judgment",
+          "title": "Label",
+          "type": "string"
+        },
+        "method_note": {
+          "description": "How ratings were derived; shown with the assessment.",
+          "title": "Method Note",
+          "type": "string"
+        },
+        "overall": {
+          "$ref": "#/$defs/Rating"
+        },
+        "overrides": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Override"
+          },
+          "title": "Overrides",
+          "type": "array"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        }
+      },
+      "required": [
+        "question",
+        "factors",
+        "overall",
+        "method_note"
+      ],
+      "title": "QualitativeAssessment",
+      "type": "object"
+    },
+    "QualitativeFactor": {
+      "additionalProperties": false,
+      "properties": {
+        "control": {
+          "$ref": "#/$defs/ControlStrength"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "factor_id": {
+          "title": "Factor Id",
+          "type": "string"
+        },
+        "impact": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Impact",
+          "type": "integer"
+        },
+        "inherent": {
+          "$ref": "#/$defs/Rating"
+        },
+        "likelihood": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Likelihood",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        },
+        "residual": {
+          "$ref": "#/$defs/Rating"
+        },
+        "source": {
+          "$ref": "#/$defs/FactorSource"
+        }
+      },
+      "required": [
+        "factor_id",
+        "name",
+        "description",
+        "likelihood",
+        "impact",
+        "control",
+        "inherent",
+        "residual",
+        "rationale",
+        "source"
+      ],
+      "title": "QualitativeFactor",
+      "type": "object"
+    },
+    "QuestionId": {
+      "enum": [
+        "q1_market",
+        "q2_balance_sheet",
+        "q3_transition"
+      ],
+      "title": "QuestionId",
+      "type": "string"
+    },
+    "Rating": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Rating",
+      "type": "string"
+    },
+    "ReviewDecision": {
+      "enum": [
+        "approve",
+        "reject"
+      ],
+      "title": "ReviewDecision",
+      "type": "string"
+    },
+    "RunRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_name": {
+          "title": "Dataset Name",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "input_hash": {
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "n_variations": {
+          "title": "N Variations",
+          "type": "integer"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/RunStatus"
+        },
+        "synthetic": {
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "question",
+        "status",
+        "created_at",
+        "updated_at",
+        "input_hash",
+        "contract_version",
+        "n_variations",
+        "dataset_name",
+        "synthetic"
+      ],
+      "title": "RunRecord",
+      "type": "object"
+    },
+    "RunStatus": {
+      "enum": [
+        "pending",
+        "running",
+        "awaiting_review",
+        "approved",
+        "rejected",
+        "failed"
+      ],
+      "title": "RunStatus",
+      "type": "string"
+    },
+    "SensitivityRow": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "effect": {
+          "description": "max(medians) - min(medians).",
+          "title": "Effect",
+          "type": "number"
+        },
+        "medians": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Dimension value (as string) -> median of the metric.",
+          "title": "Medians",
+          "type": "object"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dimension",
+        "metric",
+        "medians",
+        "effect"
+      ],
+      "title": "SensitivityRow",
+      "type": "object"
+    },
+    "SignOff": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "comment": {
+          "title": "Comment",
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/ReviewDecision"
+        },
+        "reviewer": {
+          "title": "Reviewer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reviewer",
+        "decision",
+        "comment",
+        "at"
+      ],
+      "title": "SignOff",
+      "type": "object"
+    },
+    "Unit": {
+      "enum": [
+        "fraction_of_gross",
+        "fraction",
+        "currency",
+        "bp",
+        "count",
+        "ratio",
+        "probability",
+        "tCO2e",
+        "tCO2e_per_musd",
+        "days",
+        "years"
+      ],
+      "title": "Unit",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assessment": {
+      "$ref": "#/$defs/QualitativeAssessment"
+    },
+    "comparison": {
+      "$ref": "#/$defs/Comparison"
+    },
+    "headline": {
+      "description": "Short sentences; every number in them is verified against traces.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Headline",
+      "type": "array"
+    },
+    "markdown": {
+      "title": "Markdown",
+      "type": "string"
+    },
+    "run": {
+      "$ref": "#/$defs/RunRecord"
+    },
+    "signoff": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SignOff"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "run",
+    "headline",
+    "comparison",
+    "assessment",
+    "markdown"
+  ],
+  "title": "Report",
+  "type": "object"
+}

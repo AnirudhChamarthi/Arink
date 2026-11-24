@@ -1,0 +1,108 @@
+{
+  "assessment": {
+    "factors": [
+      {
+        "control": "adequate",
+        "description": "Placeholder.",
+        "evidence": [
+          {
+            "description": "fake",
+            "kind": "note",
+            "ref": "fake"
+          }
+        ],
+        "factor_id": "fake_factor",
+        "impact": 4,
+        "inherent": "high",
+        "likelihood": 3,
+        "name": "Fake factor",
+        "rationale": "Placeholder rationale.",
+        "residual": "medium",
+        "source": "analyst"
+      }
+    ],
+    "label": "judgment",
+    "method_note": "Fake assessor.",
+    "overall": "medium",
+    "overrides": [
+      {
+        "at": "2026-11-24T12:00:00Z",
+        "by": "analyst",
+        "factor_id": "fake_factor",
+        "field": "impact",
+        "new": 4,
+        "old": 3,
+        "reason": "example"
+      }
+    ],
+    "question": "q1_market"
+  },
+  "comparison": {
+    "break_evens": [],
+    "flips": [],
+    "label_counts": {},
+    "method_spread": {},
+    "metric_ranges": {
+      "es": {
+        "max": 0.057824,
+        "median": 0.034123,
+        "min": 0.012499,
+        "n": 24,
+        "unit": "fraction_of_gross"
+      },
+      "es_amount": {
+        "max": 0.059824,
+        "median": 0.036123,
+        "min": 0.014499,
+        "n": 24,
+        "unit": "currency"
+      },
+      "gross_exposure": {
+        "max": 0.060824,
+        "median": 0.037123,
+        "min": 0.015499,
+        "n": 24,
+        "unit": "currency"
+      },
+      "var": {
+        "max": 0.056824,
+        "median": 0.033123,
+        "min": 0.011499,
+        "n": 24,
+        "unit": "fraction_of_gross"
+      },
+      "var_amount": {
+        "max": 0.058824,
+        "median": 0.035123,
+        "min": 0.013499,
+        "n": 24,
+        "unit": "currency"
+      }
+    },
+    "question": "q1_market",
+    "sensitivity": []
+  },
+  "headline": [
+    "Fake headline."
+  ],
+  "markdown": "# Run run-0001\n\nFAKE REPORT",
+  "run": {
+    "contract_version": "fake",
+    "created_at": "2026-11-24T12:00:00Z",
+    "dataset_name": "fake book",
+    "error": null,
+    "input_hash": "2c77c1c84319ea353a8e95908b0245bc7b4d7ae5a1c2120860881f9c0b68b35b",
+    "n_variations": 25,
+    "question": "q1_market",
+    "run_id": "run-0001",
+    "status": "approved",
+    "synthetic": true,
+    "updated_at": "2026-11-24T12:00:00Z"
+  },
+  "signoff": {
+    "at": "2026-11-24T12:00:00Z",
+    "comment": "",
+    "decision": "approve",
+    "reviewer": "analyst"
+  }
+}

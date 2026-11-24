@@ -1,0 +1,13 @@
+{
+  "contract_version": "fake",
+  "created_at": "2026-11-24T12:00:00Z",
+  "dataset_name": "fake climate book",
+  "error": null,
+  "input_hash": "d9606ba779d8602185e988ac0263c3bc29d30c6d9b44b0a1bdad3817b716d491",
+  "n_variations": 28,
+  "question": "q3_transition",
+  "run_id": "run-0003",
+  "status": "awaiting_review",
+  "synthetic": true,
+  "updated_at": "2026-11-24T12:00:00Z"
+}

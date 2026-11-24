@@ -1,0 +1,185 @@
+{
+  "$defs": {
+    "TraceStep": {
+      "additionalProperties": false,
+      "properties": {
+        "formula": {
+          "description": "LaTeX without surrounding $ delimiters.",
+          "title": "Formula",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable id unique within the trace, e.g. 'portfolio_variance'.",
+          "title": "Id",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        },
+        "substitution": {
+          "description": "The formula with numbers filled in, plain text or LaTeX.",
+          "title": "Substitution",
+          "type": "string"
+        },
+        "table": {
+          "anyOf": [
+            {
+              "items": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Per-row detail for vector steps.",
+          "title": "Table"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Unit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "formula",
+        "substitution"
+      ],
+      "title": "TraceStep",
+      "type": "object"
+    },
+    "Unit": {
+      "enum": [
+        "fraction_of_gross",
+        "fraction",
+        "currency",
+        "bp",
+        "count",
+        "ratio",
+        "probability",
+        "tCO2e",
+        "tCO2e_per_musd",
+        "days",
+        "years"
+      ],
+      "title": "Unit",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "input_hash": {
+      "description": "SHA-256 hex of the canonical JSON of (model_id, dataset, params, seed).",
+      "title": "Input Hash",
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": true,
+      "description": "Small summary of inputs (parameters, counts), not raw data.",
+      "title": "Inputs",
+      "type": "object"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "result": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "Final named values; each must equal a metric of the output.",
+      "title": "Result",
+      "type": "object"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/TraceStep"
+      },
+      "title": "Steps",
+      "type": "array"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "trace_id": {
+      "description": "'<model_id>-<first 12 hex of input_hash>'; deterministic.",
+      "title": "Trace Id",
+      "type": "string"
+    },
+    "warnings": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "trace_id",
+    "model_id",
+    "title",
+    "assumptions",
+    "inputs",
+    "steps",
+    "result",
+    "input_hash"
+  ],
+  "title": "Trace",
+  "type": "object"
+}

@@ -1,0 +1,157 @@
+{
+  "assumptions": [
+    "Fake model output."
+  ],
+  "input_hash": "64917e2e0682fa34a4031250636d53754bb44e3823cccb07315a3a8e875397ca",
+  "inputs": {
+    "params": {
+      "capital_threshold": 0.07,
+      "fire_sale_impact": 0.05,
+      "htm_treatment": "at_cost",
+      "lcr_threshold": 1.0,
+      "loss_severity": "base",
+      "rate_shock_bp": -200,
+      "run_speed": "slow"
+    }
+  },
+  "model_id": "q2.resilience",
+  "result": {
+    "capital_ratio_after": 0.038642,
+    "capital_ratio_before": 0.037642,
+    "cet1_after": 0.036642,
+    "credit_loss": 0.032642,
+    "delta_eve": 0.029642,
+    "delta_eve_pct_cet1": 0.030642,
+    "delta_nii_12m": 0.031642,
+    "deposit_outflow": 0.034642,
+    "fire_sale_loss": 0.035642,
+    "lcr_after": 0.040642,
+    "lcr_before": 0.039642,
+    "unrealised_securities_loss": 0.033642
+  },
+  "steps": [
+    {
+      "formula": "\\text{fake}",
+      "id": "delta_eve",
+      "note": "",
+      "substitution": "0.029642",
+      "table": null,
+      "title": "Change in economic value of equity.",
+      "unit": "currency",
+      "value": 0.029642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "delta_eve_pct_cet1",
+      "note": "",
+      "substitution": "0.030642",
+      "table": null,
+      "title": "Delta EVE / CET1.",
+      "unit": "fraction",
+      "value": 0.030642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "delta_nii_12m",
+      "note": "",
+      "substitution": "0.031642",
+      "table": null,
+      "title": "12-month NII change.",
+      "unit": "currency",
+      "value": 0.031642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "credit_loss",
+      "note": "",
+      "substitution": "0.032642",
+      "table": null,
+      "title": "Stressed credit loss.",
+      "unit": "currency",
+      "value": 0.032642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "unrealised_securities_loss",
+      "note": "",
+      "substitution": "0.033642",
+      "table": null,
+      "title": "Mark-to-market loss on securities.",
+      "unit": "currency",
+      "value": 0.033642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "deposit_outflow",
+      "note": "",
+      "substitution": "0.034642",
+      "table": null,
+      "title": "30-day deposit outflow.",
+      "unit": "currency",
+      "value": 0.034642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "fire_sale_loss",
+      "note": "",
+      "substitution": "0.035642",
+      "table": null,
+      "title": "Realised loss from forced sales.",
+      "unit": "currency",
+      "value": 0.035642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "cet1_after",
+      "note": "",
+      "substitution": "0.036642",
+      "table": null,
+      "title": "CET1 after all losses.",
+      "unit": "currency",
+      "value": 0.036642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "capital_ratio_before",
+      "note": "",
+      "substitution": "0.037642",
+      "table": null,
+      "title": "CET1 / RWA before stress.",
+      "unit": "fraction",
+      "value": 0.037642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "capital_ratio_after",
+      "note": "",
+      "substitution": "0.038642",
+      "table": null,
+      "title": "CET1 / RWA after stress.",
+      "unit": "fraction",
+      "value": 0.038642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "lcr_before",
+      "note": "",
+      "substitution": "0.039642",
+      "table": null,
+      "title": "LCR before stress.",
+      "unit": "ratio",
+      "value": 0.039642
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "lcr_after",
+      "note": "",
+      "substitution": "0.040642",
+      "table": null,
+      "title": "LCR after stress.",
+      "unit": "ratio",
+      "value": 0.040642
+    }
+  ],
+  "title": "FAKE Rate shock plus deposit run",
+  "trace_id": "q2.resilience-64917e2e0682",
+  "warnings": []
+}

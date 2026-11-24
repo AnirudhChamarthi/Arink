@@ -1,0 +1,743 @@
+{
+  "$defs": {
+    "BankBalanceSheet": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "assets": {
+          "items": {
+            "$ref": "#/$defs/BsAsset"
+          },
+          "minItems": 1,
+          "title": "Assets",
+          "type": "array"
+        },
+        "cet1_capital": {
+          "exclusiveMinimum": 0,
+          "title": "Cet1 Capital",
+          "type": "number"
+        },
+        "currency": {
+          "default": "USD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "deposits": {
+          "items": {
+            "$ref": "#/$defs/DepositSegment"
+          },
+          "title": "Deposits",
+          "type": "array"
+        },
+        "governance": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "description": "Qualitative evidence, e.g. {'cro_vacancy_months': 8, 'hedges_reduced_last_year': True}.",
+          "title": "Governance",
+          "type": "object"
+        },
+        "hedges": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SwapHedge"
+          },
+          "title": "Hedges",
+          "type": "array"
+        },
+        "kind": {
+          "const": "balance_sheet",
+          "default": "balance_sheet",
+          "title": "Kind",
+          "type": "string"
+        },
+        "loan_pools": {
+          "description": "Credit view of the loan book; EAD should reconcile to loans.",
+          "items": {
+            "$ref": "#/$defs/LoanPool"
+          },
+          "title": "Loan Pools",
+          "type": "array"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "policy_rate": {
+          "description": "Current short rate (annual fraction).",
+          "title": "Policy Rate",
+          "type": "number"
+        },
+        "risk_weighted_assets": {
+          "exclusiveMinimum": 0,
+          "title": "Risk Weighted Assets",
+          "type": "number"
+        },
+        "synthetic": {
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "wholesale_funding": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/WholesaleFunding"
+          },
+          "title": "Wholesale Funding",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "as_of",
+        "synthetic",
+        "assets",
+        "loan_pools",
+        "deposits",
+        "cet1_capital",
+        "risk_weighted_assets",
+        "policy_rate"
+      ],
+      "title": "BankBalanceSheet",
+      "type": "object"
+    },
+    "BsAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "book_value": {
+          "minimum": 0,
+          "title": "Book Value",
+          "type": "number"
+        },
+        "convexity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Convexity"
+        },
+        "coupon_rate": {
+          "description": "Annual, as a fraction.",
+          "title": "Coupon Rate",
+          "type": "number"
+        },
+        "hqla_level": {
+          "anyOf": [
+            {
+              "enum": [
+                "1",
+                "2a",
+                "2b"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hqla Level"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "cash",
+            "hqla_securities",
+            "afs_securities",
+            "htm_securities",
+            "loans",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "market_value": {
+          "minimum": 0,
+          "title": "Market Value",
+          "type": "number"
+        },
+        "maturity_years": {
+          "minimum": 0,
+          "title": "Maturity Years",
+          "type": "number"
+        },
+        "modified_duration": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "If None, derived from coupon and maturity.",
+          "title": "Modified Duration"
+        },
+        "repricing_years": {
+          "description": "Time to next rate reset; equals maturity for fixed rate.",
+          "minimum": 0,
+          "title": "Repricing Years",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "book_value",
+        "market_value",
+        "coupon_rate",
+        "maturity_years",
+        "repricing_years"
+      ],
+      "title": "BsAsset",
+      "type": "object"
+    },
+    "ClimateHolding": {
+      "additionalProperties": false,
+      "properties": {
+        "controversy_flags": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Controversy Flags",
+          "type": "array"
+        },
+        "data_quality": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "1 reported+verified ... 5 sector estimate.",
+          "title": "Data Quality"
+        },
+        "ebitda": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ebitda"
+        },
+        "emissions_year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Emissions Year"
+        },
+        "evic": {
+          "description": "Enterprise value including cash.",
+          "exclusiveMinimum": 0,
+          "title": "Evic",
+          "type": "number"
+        },
+        "exclusion_flags": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Exclusion Flags",
+          "type": "array"
+        },
+        "issuer": {
+          "title": "Issuer",
+          "type": "string"
+        },
+        "market_value": {
+          "description": "Signed; shorts excluded from financed emissions.",
+          "title": "Market Value",
+          "type": "number"
+        },
+        "revenue": {
+          "exclusiveMinimum": 0,
+          "title": "Revenue",
+          "type": "number"
+        },
+        "scope1": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "tCO2e per year; None if not available.",
+          "title": "Scope1"
+        },
+        "scope2": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope2"
+        },
+        "scope3": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope3"
+        },
+        "sector": {
+          "title": "Sector",
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "sector",
+        "market_value",
+        "evic",
+        "revenue"
+      ],
+      "title": "ClimateHolding",
+      "type": "object"
+    },
+    "ClimatePortfolio": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "currency": {
+          "default": "USD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "holdings": {
+          "items": {
+            "$ref": "#/$defs/ClimateHolding"
+          },
+          "minItems": 1,
+          "title": "Holdings",
+          "type": "array"
+        },
+        "kind": {
+          "const": "climate",
+          "default": "climate",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "synthetic": {
+          "title": "Synthetic",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "as_of",
+        "synthetic",
+        "holdings"
+      ],
+      "title": "ClimatePortfolio",
+      "type": "object"
+    },
+    "DepositSegment": {
+      "additionalProperties": false,
+      "properties": {
+        "balance": {
+          "minimum": 0,
+          "title": "Balance",
+          "type": "number"
+        },
+        "insured_share": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Insured Share",
+          "type": "number"
+        },
+        "rate": {
+          "default": 0.0,
+          "description": "Current deposit rate (annual fraction).",
+          "title": "Rate",
+          "type": "number"
+        },
+        "rate_beta": {
+          "description": "Share of a policy-rate change passed to depositors.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Rate Beta",
+          "type": "number"
+        },
+        "runoff_fast": {
+          "description": "30-day outflow fraction in a fast run.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Runoff Fast",
+          "type": "number"
+        },
+        "runoff_slow": {
+          "description": "30-day outflow fraction in a slow run.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Runoff Slow",
+          "type": "number"
+        },
+        "segment": {
+          "title": "Segment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment",
+        "balance",
+        "insured_share",
+        "rate_beta",
+        "runoff_slow",
+        "runoff_fast"
+      ],
+      "title": "DepositSegment",
+      "type": "object"
+    },
+    "LoanPool": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_correlation": {
+          "description": "Vasicek rho.",
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Asset Correlation",
+          "type": "number"
+        },
+        "ead": {
+          "description": "Exposure at default (currency).",
+          "minimum": 0,
+          "title": "Ead",
+          "type": "number"
+        },
+        "lgd": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Lgd",
+          "type": "number"
+        },
+        "pd": {
+          "description": "Through-the-cycle 1-year probability of default.",
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Pd",
+          "type": "number"
+        },
+        "segment": {
+          "title": "Segment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "segment",
+        "ead",
+        "pd",
+        "lgd",
+        "asset_correlation"
+      ],
+      "title": "LoanPool",
+      "type": "object"
+    },
+    "MarketDataset": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "base_currency": {
+          "default": "USD",
+          "title": "Base Currency",
+          "type": "string"
+        },
+        "dates": {
+          "description": "Ascending trading dates of the return history.",
+          "items": {
+            "format": "date",
+            "type": "string"
+          },
+          "title": "Dates",
+          "type": "array"
+        },
+        "kind": {
+          "const": "market",
+          "default": "market",
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "positions": {
+          "items": {
+            "$ref": "#/$defs/MarketPosition"
+          },
+          "minItems": 1,
+          "title": "Positions",
+          "type": "array"
+        },
+        "returns": {
+          "additionalProperties": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "description": "Daily simple returns per ticker, aligned with `dates`; None marks a missing value.",
+          "title": "Returns",
+          "type": "object"
+        },
+        "synthetic": {
+          "description": "True if generated; shown as a banner in every UI.",
+          "title": "Synthetic",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "as_of",
+        "synthetic",
+        "positions",
+        "dates",
+        "returns"
+      ],
+      "title": "MarketDataset",
+      "type": "object"
+    },
+    "MarketPosition": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_class": {
+          "default": "equity",
+          "enum": [
+            "equity",
+            "fixed_income",
+            "commodity",
+            "cash",
+            "other"
+          ],
+          "title": "Asset Class",
+          "type": "string"
+        },
+        "currency": {
+          "default": "USD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "price": {
+          "exclusiveMinimum": 0,
+          "title": "Price",
+          "type": "number"
+        },
+        "quantity": {
+          "description": "Signed: negative is short.",
+          "title": "Quantity",
+          "type": "number"
+        },
+        "sector": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sector"
+        },
+        "ticker": {
+          "title": "Ticker",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ticker",
+        "quantity",
+        "price"
+      ],
+      "title": "MarketPosition",
+      "type": "object"
+    },
+    "SwapHedge": {
+      "additionalProperties": false,
+      "properties": {
+        "fixed_rate": {
+          "title": "Fixed Rate",
+          "type": "number"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "maturity_years": {
+          "exclusiveMinimum": 0,
+          "title": "Maturity Years",
+          "type": "number"
+        },
+        "notional": {
+          "minimum": 0,
+          "title": "Notional",
+          "type": "number"
+        },
+        "pay_fixed": {
+          "default": true,
+          "title": "Pay Fixed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "notional",
+        "fixed_rate",
+        "maturity_years"
+      ],
+      "title": "SwapHedge",
+      "type": "object"
+    },
+    "WholesaleFunding": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "minimum": 0,
+          "title": "Amount",
+          "type": "number"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "maturity_days": {
+          "minimum": 0,
+          "title": "Maturity Days",
+          "type": "integer"
+        },
+        "rate": {
+          "title": "Rate",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "amount",
+        "maturity_days",
+        "rate"
+      ],
+      "title": "WholesaleFunding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "dataset": {
+      "discriminator": {
+        "mapping": {
+          "balance_sheet": "#/$defs/BankBalanceSheet",
+          "climate": "#/$defs/ClimatePortfolio",
+          "market": "#/$defs/MarketDataset"
+        },
+        "propertyName": "kind"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/MarketDataset"
+        },
+        {
+          "$ref": "#/$defs/BankBalanceSheet"
+        },
+        {
+          "$ref": "#/$defs/ClimatePortfolio"
+        }
+      ],
+      "title": "Dataset"
+    },
+    "model_id": {
+      "title": "Model Id",
+      "type": "string"
+    },
+    "params": {
+      "additionalProperties": true,
+      "default": {},
+      "title": "Params",
+      "type": "object"
+    },
+    "seed": {
+      "default": 20261123,
+      "title": "Seed",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "model_id",
+    "dataset"
+  ],
+  "title": "CalcRequest",
+  "type": "object"
+}

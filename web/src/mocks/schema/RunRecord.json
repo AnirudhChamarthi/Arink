@@ -1,0 +1,94 @@
+{
+  "$defs": {
+    "QuestionId": {
+      "enum": [
+        "q1_market",
+        "q2_balance_sheet",
+        "q3_transition"
+      ],
+      "title": "QuestionId",
+      "type": "string"
+    },
+    "RunStatus": {
+      "enum": [
+        "pending",
+        "running",
+        "awaiting_review",
+        "approved",
+        "rejected",
+        "failed"
+      ],
+      "title": "RunStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dataset_name": {
+      "title": "Dataset Name",
+      "type": "string"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
+    "input_hash": {
+      "title": "Input Hash",
+      "type": "string"
+    },
+    "n_variations": {
+      "title": "N Variations",
+      "type": "integer"
+    },
+    "question": {
+      "$ref": "#/$defs/QuestionId"
+    },
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/RunStatus"
+    },
+    "synthetic": {
+      "title": "Synthetic",
+      "type": "boolean"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "question",
+    "status",
+    "created_at",
+    "updated_at",
+    "input_hash",
+    "contract_version",
+    "n_variations",
+    "dataset_name",
+    "synthetic"
+  ],
+  "title": "RunRecord",
+  "type": "object"
+}
