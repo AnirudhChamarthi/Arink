@@ -1,0 +1,1130 @@
+{
+  "$defs": {
+    "BreakEven": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "found": {
+          "title": "Found",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Metric key from an extra run, starting with 'breakeven_'.",
+          "title": "Name",
+          "type": "string"
+        },
+        "trace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trace Id"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "name",
+        "value",
+        "unit",
+        "found",
+        "description"
+      ],
+      "title": "BreakEven",
+      "type": "object"
+    },
+    "Comparison": {
+      "additionalProperties": false,
+      "properties": {
+        "break_evens": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/BreakEven"
+          },
+          "title": "Break Evens",
+          "type": "array"
+        },
+        "flips": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ConclusionFlip"
+          },
+          "title": "Flips",
+          "type": "array"
+        },
+        "label_counts": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object"
+          },
+          "description": "Label -> value -> count.",
+          "title": "Label Counts",
+          "type": "object"
+        },
+        "method_spread": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Metric -> max/min across methods.",
+          "title": "Method Spread",
+          "type": "object"
+        },
+        "metric_ranges": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MetricRange"
+          },
+          "title": "Metric Ranges",
+          "type": "object"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        },
+        "sensitivity": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SensitivityRow"
+          },
+          "title": "Sensitivity",
+          "type": "array"
+        }
+      },
+      "required": [
+        "question",
+        "metric_ranges"
+      ],
+      "title": "Comparison",
+      "type": "object"
+    },
+    "ConclusionFlip": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "from_value": {
+          "title": "From Value",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "outcome_from": {
+          "title": "Outcome From",
+          "type": "string"
+        },
+        "outcome_to": {
+          "title": "Outcome To",
+          "type": "string"
+        },
+        "to_value": {
+          "title": "To Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "dimension",
+        "from_value",
+        "to_value",
+        "outcome_from",
+        "outcome_to",
+        "description"
+      ],
+      "title": "ConclusionFlip",
+      "type": "object"
+    },
+    "ControlStrength": {
+      "enum": [
+        "weak",
+        "adequate",
+        "strong"
+      ],
+      "title": "ControlStrength",
+      "type": "string"
+    },
+    "DataQualityFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "check": {
+          "description": "Short machine id, e.g. 'missing_returns', 'stale_price'.",
+          "title": "Check",
+          "type": "string"
+        },
+        "count": {
+          "default": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        },
+        "subject": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Ticker, issuer, segment... if specific.",
+          "title": "Subject"
+        }
+      },
+      "required": [
+        "check",
+        "severity",
+        "field",
+        "message"
+      ],
+      "title": "DataQualityFinding",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "trace",
+            "finding",
+            "metric",
+            "dataset_field",
+            "note"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "ref": {
+          "description": "trace_id[/step], finding check, metric key, dataset field path, or free text.",
+          "title": "Ref",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "ref",
+        "description"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "ExtraRun": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Params",
+          "type": "object"
+        }
+      },
+      "required": [
+        "model_id"
+      ],
+      "title": "ExtraRun",
+      "type": "object"
+    },
+    "FactorSource": {
+      "enum": [
+        "rule",
+        "llm_draft",
+        "analyst",
+        "unassessed"
+      ],
+      "title": "FactorSource",
+      "type": "string"
+    },
+    "GridSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "dimensions": {
+          "additionalProperties": {
+            "items": {},
+            "type": "array"
+          },
+          "description": "Parameter name -> values to vary (cartesian product).",
+          "title": "Dimensions",
+          "type": "object"
+        },
+        "fixed": {
+          "additionalProperties": true,
+          "default": {},
+          "title": "Fixed",
+          "type": "object"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_id",
+        "dimensions"
+      ],
+      "title": "GridSpec",
+      "type": "object"
+    },
+    "Metric": {
+      "additionalProperties": false,
+      "properties": {
+        "trace_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trace Id"
+        },
+        "trace_step": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trace Step"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "value",
+        "unit"
+      ],
+      "title": "Metric",
+      "type": "object"
+    },
+    "MetricRange": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "title": "Max",
+          "type": "number"
+        },
+        "median": {
+          "title": "Median",
+          "type": "number"
+        },
+        "min": {
+          "title": "Min",
+          "type": "number"
+        },
+        "n": {
+          "title": "N",
+          "type": "integer"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "unit",
+        "min",
+        "median",
+        "max",
+        "n"
+      ],
+      "title": "MetricRange",
+      "type": "object"
+    },
+    "ModelOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "findings": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/DataQualityFinding"
+          },
+          "title": "Findings",
+          "type": "array"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Labels",
+          "type": "object"
+        },
+        "metrics": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Metric"
+          },
+          "title": "Metrics",
+          "type": "object"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "description": "Effective parameters after defaults were applied.",
+          "title": "Params",
+          "type": "object"
+        },
+        "traces": {
+          "items": {
+            "$ref": "#/$defs/Trace"
+          },
+          "title": "Traces",
+          "type": "array"
+        },
+        "warnings": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "model_id",
+        "params",
+        "metrics",
+        "traces"
+      ],
+      "title": "ModelOutput",
+      "type": "object"
+    },
+    "Override": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "by": {
+          "title": "By",
+          "type": "string"
+        },
+        "factor_id": {
+          "title": "Factor Id",
+          "type": "string"
+        },
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "new": {
+          "title": "New"
+        },
+        "old": {
+          "title": "Old"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "factor_id",
+        "field",
+        "old",
+        "new",
+        "reason",
+        "by",
+        "at"
+      ],
+      "title": "Override",
+      "type": "object"
+    },
+    "QualitativeAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "factors": {
+          "items": {
+            "$ref": "#/$defs/QualitativeFactor"
+          },
+          "title": "Factors",
+          "type": "array"
+        },
+        "label": {
+          "const": "judgment",
+          "default": "judgment",
+          "title": "Label",
+          "type": "string"
+        },
+        "method_note": {
+          "description": "How ratings were derived; shown with the assessment.",
+          "title": "Method Note",
+          "type": "string"
+        },
+        "overall": {
+          "$ref": "#/$defs/Rating"
+        },
+        "overrides": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Override"
+          },
+          "title": "Overrides",
+          "type": "array"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        }
+      },
+      "required": [
+        "question",
+        "factors",
+        "overall",
+        "method_note"
+      ],
+      "title": "QualitativeAssessment",
+      "type": "object"
+    },
+    "QualitativeFactor": {
+      "additionalProperties": false,
+      "properties": {
+        "control": {
+          "$ref": "#/$defs/ControlStrength"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "factor_id": {
+          "title": "Factor Id",
+          "type": "string"
+        },
+        "impact": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Impact",
+          "type": "integer"
+        },
+        "inherent": {
+          "$ref": "#/$defs/Rating"
+        },
+        "likelihood": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Likelihood",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        },
+        "residual": {
+          "$ref": "#/$defs/Rating"
+        },
+        "source": {
+          "$ref": "#/$defs/FactorSource"
+        }
+      },
+      "required": [
+        "factor_id",
+        "name",
+        "description",
+        "likelihood",
+        "impact",
+        "control",
+        "inherent",
+        "residual",
+        "rationale",
+        "source"
+      ],
+      "title": "QualitativeFactor",
+      "type": "object"
+    },
+    "QuestionId": {
+      "enum": [
+        "q1_market",
+        "q2_balance_sheet",
+        "q3_transition"
+      ],
+      "title": "QuestionId",
+      "type": "string"
+    },
+    "QuestionPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "extras": {
+          "description": "Models run once each (data quality, reverse stress).",
+          "items": {
+            "$ref": "#/$defs/ExtraRun"
+          },
+          "title": "Extras",
+          "type": "array"
+        },
+        "grid": {
+          "$ref": "#/$defs/GridSpec"
+        },
+        "max_variations": {
+          "default": 200,
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Max Variations",
+          "type": "integer"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        }
+      },
+      "required": [
+        "question",
+        "grid"
+      ],
+      "title": "QuestionPlan",
+      "type": "object"
+    },
+    "Rating": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Rating",
+      "type": "string"
+    },
+    "RunRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "dataset_name": {
+          "title": "Dataset Name",
+          "type": "string"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "input_hash": {
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "n_variations": {
+          "title": "N Variations",
+          "type": "integer"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/RunStatus"
+        },
+        "synthetic": {
+          "title": "Synthetic",
+          "type": "boolean"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "question",
+        "status",
+        "created_at",
+        "updated_at",
+        "input_hash",
+        "contract_version",
+        "n_variations",
+        "dataset_name",
+        "synthetic"
+      ],
+      "title": "RunRecord",
+      "type": "object"
+    },
+    "RunStatus": {
+      "enum": [
+        "pending",
+        "running",
+        "awaiting_review",
+        "approved",
+        "rejected",
+        "failed"
+      ],
+      "title": "RunStatus",
+      "type": "string"
+    },
+    "SensitivityRow": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "title": "Dimension",
+          "type": "string"
+        },
+        "effect": {
+          "description": "max(medians) - min(medians).",
+          "title": "Effect",
+          "type": "number"
+        },
+        "medians": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Dimension value (as string) -> median of the metric.",
+          "title": "Medians",
+          "type": "object"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        }
+      },
+      "required": [
+        "dimension",
+        "metric",
+        "medians",
+        "effect"
+      ],
+      "title": "SensitivityRow",
+      "type": "object"
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "warning",
+        "error"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "Trace": {
+      "additionalProperties": false,
+      "properties": {
+        "assumptions": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Assumptions",
+          "type": "array"
+        },
+        "input_hash": {
+          "description": "SHA-256 hex of the canonical JSON of (model_id, dataset, params, seed).",
+          "title": "Input Hash",
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": true,
+          "description": "Small summary of inputs (parameters, counts), not raw data.",
+          "title": "Inputs",
+          "type": "object"
+        },
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "result": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Final named values; each must equal a metric of the output.",
+          "title": "Result",
+          "type": "object"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/TraceStep"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "trace_id": {
+          "description": "'<model_id>-<first 12 hex of input_hash>'; deterministic.",
+          "title": "Trace Id",
+          "type": "string"
+        },
+        "warnings": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "trace_id",
+        "model_id",
+        "title",
+        "assumptions",
+        "inputs",
+        "steps",
+        "result",
+        "input_hash"
+      ],
+      "title": "Trace",
+      "type": "object"
+    },
+    "TraceStep": {
+      "additionalProperties": false,
+      "properties": {
+        "formula": {
+          "description": "LaTeX without surrounding $ delimiters.",
+          "title": "Formula",
+          "type": "string"
+        },
+        "id": {
+          "description": "Stable id unique within the trace, e.g. 'portfolio_variance'.",
+          "title": "Id",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        },
+        "substitution": {
+          "description": "The formula with numbers filled in, plain text or LaTeX.",
+          "title": "Substitution",
+          "type": "string"
+        },
+        "table": {
+          "anyOf": [
+            {
+              "items": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Per-row detail for vector steps.",
+          "title": "Table"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Unit"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "formula",
+        "substitution"
+      ],
+      "title": "TraceStep",
+      "type": "object"
+    },
+    "Unit": {
+      "enum": [
+        "fraction_of_gross",
+        "fraction",
+        "currency",
+        "bp",
+        "count",
+        "ratio",
+        "probability",
+        "tCO2e",
+        "tCO2e_per_musd",
+        "days",
+        "years"
+      ],
+      "title": "Unit",
+      "type": "string"
+    },
+    "VariationResult": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_ms": {
+          "title": "Duration Ms",
+          "type": "number"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        },
+        "output": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ModelOutput"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "spec": {
+          "$ref": "#/$defs/VariationSpec"
+        }
+      },
+      "required": [
+        "spec",
+        "duration_ms"
+      ],
+      "title": "VariationResult",
+      "type": "object"
+    },
+    "VariationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {
+          "title": "Model Id",
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": true,
+          "title": "Params",
+          "type": "object"
+        },
+        "question": {
+          "$ref": "#/$defs/QuestionId"
+        },
+        "role": {
+          "default": "grid",
+          "enum": [
+            "grid",
+            "extra"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "seed": {
+          "title": "Seed",
+          "type": "integer"
+        },
+        "variation_id": {
+          "description": "Deterministic: 'v' + 10 hex of hash(model_id, params).",
+          "title": "Variation Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "variation_id",
+        "question",
+        "model_id",
+        "params",
+        "seed"
+      ],
+      "title": "VariationSpec",
+      "type": "object"
+    },
+    "VerifierFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "location": {
+          "description": "Where the number was found, e.g. 'factor:uninsured_share/rationale'.",
+          "title": "Location",
+          "type": "string"
+        },
+        "matched": {
+          "title": "Matched",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "location",
+        "text",
+        "value",
+        "matched",
+        "message"
+      ],
+      "title": "VerifierFinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assessment": {
+      "$ref": "#/$defs/QualitativeAssessment"
+    },
+    "comparison": {
+      "$ref": "#/$defs/Comparison"
+    },
+    "plan": {
+      "$ref": "#/$defs/QuestionPlan"
+    },
+    "run": {
+      "$ref": "#/$defs/RunRecord"
+    },
+    "variations": {
+      "items": {
+        "$ref": "#/$defs/VariationResult"
+      },
+      "title": "Variations",
+      "type": "array"
+    },
+    "verifier_findings": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/VerifierFinding"
+      },
+      "title": "Verifier Findings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run",
+    "plan",
+    "variations",
+    "comparison",
+    "assessment"
+  ],
+  "title": "RunResult",
+  "type": "object"
+}

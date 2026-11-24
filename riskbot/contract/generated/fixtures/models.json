@@ -1,0 +1,869 @@
+[
+  {
+    "dataset_kind": "market",
+    "description": "Loss quantile (VaR) and expected shortfall of the portfolio over `horizon_days`, as a fraction of gross exposure, estimated from the most recent `window_days` of history. Portfolio weights are signed market value / gross exposure. Covariance methods (normal, student_t, montecarlo) use the asset covariance; historical, fhs and evt work on the historical portfolio return series. Multi-day: sqrt(h) scaling of the 1-day figure except montecarlo, which simulates N(h*mu, h*Sigma). Optional block bootstrap gives a 95% interval for VaR. The backtest always rolls the same method with a 250-day window over the whole history at 1-day horizon and the same confidence (Kupiec POF, Christoffersen independence, Basel zone on the last 250 forecasts).",
+    "labels": {
+      "backtest_verdict": [
+        "pass",
+        "fail",
+        "n/a"
+      ],
+      "basel_zone": [
+        "green",
+        "yellow",
+        "red",
+        "n/a"
+      ]
+    },
+    "method_param": "method",
+    "metrics": [
+      {
+        "description": "Value at Risk.",
+        "higher_is_worse": true,
+        "key": "var",
+        "optional": false,
+        "unit": "fraction_of_gross"
+      },
+      {
+        "description": "Expected shortfall.",
+        "higher_is_worse": true,
+        "key": "es",
+        "optional": false,
+        "unit": "fraction_of_gross"
+      },
+      {
+        "description": "VaR x gross exposure.",
+        "higher_is_worse": true,
+        "key": "var_amount",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "ES x gross exposure.",
+        "higher_is_worse": true,
+        "key": "es_amount",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Sum of |market value|.",
+        "higher_is_worse": null,
+        "key": "gross_exposure",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Bootstrap 2.5% VaR.",
+        "higher_is_worse": null,
+        "key": "var_ci_low",
+        "optional": true,
+        "unit": "fraction_of_gross"
+      },
+      {
+        "description": "Bootstrap 97.5% VaR.",
+        "higher_is_worse": null,
+        "key": "var_ci_high",
+        "optional": true,
+        "unit": "fraction_of_gross"
+      },
+      {
+        "description": "Out-of-sample backtest days.",
+        "higher_is_worse": null,
+        "key": "backtest_days",
+        "optional": true,
+        "unit": "count"
+      },
+      {
+        "description": "Days with loss > VaR.",
+        "higher_is_worse": true,
+        "key": "backtest_exceptions",
+        "optional": true,
+        "unit": "count"
+      },
+      {
+        "description": "Exceptions / days.",
+        "higher_is_worse": null,
+        "key": "backtest_exception_rate",
+        "optional": true,
+        "unit": "fraction"
+      },
+      {
+        "description": "Kupiec POF p-value.",
+        "higher_is_worse": null,
+        "key": "kupiec_p",
+        "optional": true,
+        "unit": "probability"
+      },
+      {
+        "description": "Christoffersen p-value.",
+        "higher_is_worse": null,
+        "key": "independence_p",
+        "optional": true,
+        "unit": "probability"
+      }
+    ],
+    "model_id": "q1.var",
+    "params": [
+      {
+        "applies_when": null,
+        "choices": [
+          "normal",
+          "student_t",
+          "historical",
+          "fhs",
+          "evt",
+          "montecarlo"
+        ],
+        "default": "normal",
+        "description": "normal: Gaussian; student_t: Student-t scaled to unit variance; historical: empirical quantile; fhs: GARCH(1,1)-filtered historical simulation; evt: peaks-over-threshold generalized Pareto tail; montecarlo: multivariate normal simulation.",
+        "maximum": null,
+        "minimum": null,
+        "name": "method",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 0.99,
+        "description": "VaR confidence level.",
+        "maximum": 0.999,
+        "minimum": 0.9,
+        "name": "confidence",
+        "type": "float"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 5,
+        "description": "Horizon in trading days.",
+        "maximum": 20.0,
+        "minimum": 1.0,
+        "name": "horizon_days",
+        "type": "int"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          250,
+          500,
+          750
+        ],
+        "default": 250,
+        "description": "Most recent observations used for estimation; if fewer exist, all are used with a warning.",
+        "maximum": null,
+        "minimum": null,
+        "name": "window_days",
+        "type": "int"
+      },
+      {
+        "applies_when": {
+          "method": [
+            "normal",
+            "student_t",
+            "montecarlo"
+          ]
+        },
+        "choices": [
+          "sample",
+          "ledoit_wolf"
+        ],
+        "default": "sample",
+        "description": "Sample covariance or Ledoit-Wolf shrinkage towards constant correlation.",
+        "maximum": null,
+        "minimum": null,
+        "name": "covariance",
+        "type": "str"
+      },
+      {
+        "applies_when": {
+          "method": [
+            "student_t"
+          ]
+        },
+        "choices": null,
+        "default": 5.0,
+        "description": "Degrees of freedom for student_t.",
+        "maximum": 100.0,
+        "minimum": 2.5,
+        "name": "t_dof",
+        "type": "float"
+      },
+      {
+        "applies_when": {
+          "method": [
+            "evt"
+          ]
+        },
+        "choices": null,
+        "default": 0.9,
+        "description": "Loss quantile used as the POT threshold u.",
+        "maximum": 0.97,
+        "minimum": 0.8,
+        "name": "evt_threshold_quantile",
+        "type": "float"
+      },
+      {
+        "applies_when": {
+          "method": [
+            "montecarlo"
+          ]
+        },
+        "choices": null,
+        "default": 20000,
+        "description": "Monte Carlo paths.",
+        "maximum": 200000.0,
+        "minimum": 1000.0,
+        "name": "n_sims",
+        "type": "int"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 0,
+        "description": "Block-bootstrap resamples for a 95% VaR interval; 0 disables.",
+        "maximum": 1000.0,
+        "minimum": 0.0,
+        "name": "bootstrap",
+        "type": "int"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": true,
+        "description": "Run the rolling backtest.",
+        "maximum": null,
+        "minimum": null,
+        "name": "backtest",
+        "type": "bool"
+      }
+    ],
+    "pass_label": "backtest_verdict",
+    "question": "q1_market",
+    "title": "Portfolio VaR and expected shortfall"
+  },
+  {
+    "dataset_kind": "market",
+    "description": "Missing values, stale series, outliers (|r| > 8 MAD), history length; one finding per issue.",
+    "labels": {
+      "quality": [
+        "good",
+        "fair",
+        "poor"
+      ]
+    },
+    "method_param": null,
+    "metrics": [
+      {
+        "description": "Positions.",
+        "higher_is_worse": null,
+        "key": "n_positions",
+        "optional": false,
+        "unit": "count"
+      },
+      {
+        "description": "Length of the return history.",
+        "higher_is_worse": null,
+        "key": "history_days",
+        "optional": false,
+        "unit": "days"
+      },
+      {
+        "description": "Missing return values / all values.",
+        "higher_is_worse": true,
+        "key": "missing_share",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "Series with a stale run.",
+        "higher_is_worse": true,
+        "key": "stale_series",
+        "optional": false,
+        "unit": "count"
+      },
+      {
+        "description": "Outlier returns.",
+        "higher_is_worse": true,
+        "key": "outlier_count",
+        "optional": false,
+        "unit": "count"
+      }
+    ],
+    "model_id": "q1.data_quality",
+    "params": [
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 5,
+        "description": "A run of this many identical consecutive returns of 0 counts as stale.",
+        "maximum": 30.0,
+        "minimum": 2.0,
+        "name": "stale_days",
+        "type": "int"
+      }
+    ],
+    "pass_label": null,
+    "question": "q1_market",
+    "title": "Market data quality"
+  },
+  {
+    "dataset_kind": "balance_sheet",
+    "description": "Instantaneous parallel rate shock and a 30-day deposit run. EVE change from duration/convexity (cash-flow revaluation where duration is missing), net of pay-fixed swap hedges. 12-month NII change from repricing gaps with deposit betas. Credit loss = sum EAD x LGD x stressed PD, stressed PD by Vasicek at q = 0.90 (base) or 0.99 (adverse). Outflows met from cash, then HQLA, then by selling AFS then HTM securities at a fire-sale price p = exp(-impact x share sold), solved as a fixed point. Unrealised losses on HTM count against capital only under mark_to_market; realised losses always do. Pass iff capital ratio >= capital_threshold and LCR >= lcr_threshold after stress. Thresholds are illustrative.",
+    "labels": {
+      "binding_constraint": [
+        "none",
+        "capital",
+        "liquidity",
+        "both"
+      ],
+      "verdict": [
+        "pass",
+        "fail"
+      ]
+    },
+    "method_param": null,
+    "metrics": [
+      {
+        "description": "Change in economic value of equity.",
+        "higher_is_worse": null,
+        "key": "delta_eve",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Delta EVE / CET1.",
+        "higher_is_worse": null,
+        "key": "delta_eve_pct_cet1",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "12-month NII change.",
+        "higher_is_worse": null,
+        "key": "delta_nii_12m",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Stressed credit loss.",
+        "higher_is_worse": true,
+        "key": "credit_loss",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Mark-to-market loss on securities.",
+        "higher_is_worse": true,
+        "key": "unrealised_securities_loss",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "30-day deposit outflow.",
+        "higher_is_worse": true,
+        "key": "deposit_outflow",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Realised loss from forced sales.",
+        "higher_is_worse": true,
+        "key": "fire_sale_loss",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "CET1 after all losses.",
+        "higher_is_worse": null,
+        "key": "cet1_after",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "CET1 / RWA before stress.",
+        "higher_is_worse": null,
+        "key": "capital_ratio_before",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "CET1 / RWA after stress.",
+        "higher_is_worse": false,
+        "key": "capital_ratio_after",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "LCR before stress.",
+        "higher_is_worse": null,
+        "key": "lcr_before",
+        "optional": false,
+        "unit": "ratio"
+      },
+      {
+        "description": "LCR after stress.",
+        "higher_is_worse": false,
+        "key": "lcr_after",
+        "optional": false,
+        "unit": "ratio"
+      }
+    ],
+    "model_id": "q2.resilience",
+    "params": [
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 200,
+        "description": "Parallel shift of the yield curve in basis points.",
+        "maximum": 600.0,
+        "minimum": -400.0,
+        "name": "rate_shock_bp",
+        "type": "int"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          "none",
+          "slow",
+          "fast"
+        ],
+        "default": "slow",
+        "description": "Which 30-day run-off rates apply to deposits.",
+        "maximum": null,
+        "minimum": null,
+        "name": "run_speed",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          "base",
+          "adverse"
+        ],
+        "default": "base",
+        "description": "Vasicek quantile for stressed PD: base 0.90, adverse 0.99.",
+        "maximum": null,
+        "minimum": null,
+        "name": "loss_severity",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          "at_cost",
+          "mark_to_market"
+        ],
+        "default": "at_cost",
+        "description": "Whether unrealised HTM losses reduce capital.",
+        "maximum": null,
+        "minimum": null,
+        "name": "htm_treatment",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 0.07,
+        "description": "Minimum CET1 / RWA after stress (illustrative).",
+        "maximum": 0.3,
+        "minimum": 0.0,
+        "name": "capital_threshold",
+        "type": "float"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 1.0,
+        "description": "Minimum LCR after stress (illustrative).",
+        "maximum": 3.0,
+        "minimum": 0.0,
+        "name": "lcr_threshold",
+        "type": "float"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 0.05,
+        "description": "Price impact lambda: price = exp(-lambda x fraction of saleable securities sold).",
+        "maximum": 1.0,
+        "minimum": 0.0,
+        "name": "fire_sale_impact",
+        "type": "float"
+      }
+    ],
+    "pass_label": "verdict",
+    "question": "q2_balance_sheet",
+    "title": "Rate shock plus deposit run"
+  },
+  {
+    "dataset_kind": "balance_sheet",
+    "description": "Bisection on the q2.resilience model. breakeven_deposit_outflow: smallest uniform 30-day outflow fraction of all deposits (0..1) that breaches the target constraint at `rate_shock_bp`. breakeven_rate_shock_bp: smallest parallel shock (0..1000 bp) that breaches the target with run_speed='slow'. A metric is omitted if no breach occurs within its range. Monotonicity is checked and reported as a warning if violated.",
+    "labels": {
+      "outflow_found": [
+        "yes",
+        "no"
+      ],
+      "rate_found": [
+        "yes",
+        "no"
+      ]
+    },
+    "method_param": null,
+    "metrics": [
+      {
+        "description": "Smallest deposit outflow that breaches the target.",
+        "higher_is_worse": false,
+        "key": "breakeven_deposit_outflow",
+        "optional": true,
+        "unit": "fraction"
+      },
+      {
+        "description": "Smallest rate shock that breaches the target.",
+        "higher_is_worse": false,
+        "key": "breakeven_rate_shock_bp",
+        "optional": true,
+        "unit": "bp"
+      }
+    ],
+    "model_id": "q2.reverse_stress",
+    "params": [
+      {
+        "applies_when": null,
+        "choices": [
+          "capital",
+          "liquidity"
+        ],
+        "default": "capital",
+        "description": "Which constraint to break.",
+        "maximum": null,
+        "minimum": null,
+        "name": "target",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 200,
+        "description": "Rate shock held fixed while searching the outflow.",
+        "maximum": 600.0,
+        "minimum": -400.0,
+        "name": "rate_shock_bp",
+        "type": "int"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          "at_cost",
+          "mark_to_market"
+        ],
+        "default": "at_cost",
+        "description": "As in q2.resilience.",
+        "maximum": null,
+        "minimum": null,
+        "name": "htm_treatment",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 0.001,
+        "description": "Bisection tolerance (fraction for outflow; x1000 bp for rates).",
+        "maximum": 0.05,
+        "minimum": 1e-06,
+        "name": "tolerance",
+        "type": "float"
+      }
+    ],
+    "pass_label": null,
+    "question": "q2_balance_sheet",
+    "title": "Reverse stress test"
+  },
+  {
+    "dataset_kind": "balance_sheet",
+    "description": "Reconciliation and structural indicators used by the Q2 rubric.",
+    "labels": {
+      "quality": [
+        "good",
+        "fair",
+        "poor"
+      ]
+    },
+    "method_param": null,
+    "metrics": [
+      {
+        "description": "|sum of loan-pool EAD - loans book value| / loans book value.",
+        "higher_is_worse": true,
+        "key": "loan_reconciliation_gap",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "Uninsured deposits / all deposits.",
+        "higher_is_worse": true,
+        "key": "uninsured_deposit_share",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "Largest deposit segment / all deposits.",
+        "higher_is_worse": true,
+        "key": "largest_segment_share",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "HQLA / total assets.",
+        "higher_is_worse": null,
+        "key": "hqla_share",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "Asset duration - (liabilities / assets) x liability duration.",
+        "higher_is_worse": true,
+        "key": "duration_gap_years",
+        "optional": false,
+        "unit": "years"
+      },
+      {
+        "description": "Swap notional / fixed-rate securities.",
+        "higher_is_worse": null,
+        "key": "hedge_ratio",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "HTM / all securities.",
+        "higher_is_worse": null,
+        "key": "htm_share_of_securities",
+        "optional": false,
+        "unit": "fraction"
+      }
+    ],
+    "model_id": "q2.data_quality",
+    "params": [],
+    "pass_label": null,
+    "question": "q2_balance_sheet",
+    "title": "Balance-sheet data quality and structure"
+  },
+  {
+    "dataset_kind": "climate",
+    "description": "Illustrative NGFS-style scenarios set a carbon-price path; price_path scales it (low 0.5x, central 1x, high 2x). Annual carbon cost = emissions x price x (1 - sector pass-through); value shock = -(PV of cost over horizon) / EVIC, capped at -100%, applied to long market value. Missing or estimated emissions are imputed per `missing_data` (sector-average intensity, its 75th percentile, or excluded) and sampled log-normally with spread increasing in data_quality; loss quantiles come from `n_sims` draws. Financed emissions use attribution MV / EVIC. Alignment ratio = portfolio intensity / budget-pathway intensity.",
+    "labels": {
+      "exposure_level": [
+        "low",
+        "moderate",
+        "high"
+      ]
+    },
+    "method_param": "missing_data",
+    "metrics": [
+      {
+        "description": "Median loss / long market value.",
+        "higher_is_worse": true,
+        "key": "loss_pct",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "5th percentile of loss.",
+        "higher_is_worse": true,
+        "key": "loss_p05",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "95th percentile of loss.",
+        "higher_is_worse": true,
+        "key": "loss_p95",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "Median loss in currency.",
+        "higher_is_worse": true,
+        "key": "loss_amount",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Weighted average carbon intensity.",
+        "higher_is_worse": true,
+        "key": "waci",
+        "optional": false,
+        "unit": "tCO2e_per_musd"
+      },
+      {
+        "description": "Attributed emissions.",
+        "higher_is_worse": true,
+        "key": "financed_emissions",
+        "optional": false,
+        "unit": "tCO2e"
+      },
+      {
+        "description": "Carbon price per tonne at the horizon.",
+        "higher_is_worse": null,
+        "key": "carbon_price_end",
+        "optional": false,
+        "unit": "currency"
+      },
+      {
+        "description": "Intensity / pathway intensity.",
+        "higher_is_worse": true,
+        "key": "alignment_ratio",
+        "optional": false,
+        "unit": "ratio"
+      },
+      {
+        "description": "Share of financed emissions imputed.",
+        "higher_is_worse": true,
+        "key": "estimated_share",
+        "optional": false,
+        "unit": "fraction"
+      }
+    ],
+    "model_id": "q3.transition",
+    "params": [
+      {
+        "applies_when": null,
+        "choices": [
+          "orderly",
+          "disorderly",
+          "hot_house"
+        ],
+        "default": "orderly",
+        "description": "Carbon-price scenario family (illustrative, NGFS-style).",
+        "maximum": null,
+        "minimum": null,
+        "name": "scenario",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          "low",
+          "central",
+          "high"
+        ],
+        "default": "central",
+        "description": "Multiplier on the scenario's carbon-price path.",
+        "maximum": null,
+        "minimum": null,
+        "name": "price_path",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": [
+          "sector_average",
+          "conservative",
+          "exclude"
+        ],
+        "default": "sector_average",
+        "description": "Treatment of missing emissions.",
+        "maximum": null,
+        "minimum": null,
+        "name": "missing_data",
+        "type": "str"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": false,
+        "description": "Add scope 3 where available.",
+        "maximum": null,
+        "minimum": null,
+        "name": "include_scope3",
+        "type": "bool"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 10,
+        "description": "Cost horizon.",
+        "maximum": 30.0,
+        "minimum": 1.0,
+        "name": "horizon_years",
+        "type": "int"
+      },
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 2000,
+        "description": "Uncertainty draws.",
+        "maximum": 20000.0,
+        "minimum": 100.0,
+        "name": "n_sims",
+        "type": "int"
+      }
+    ],
+    "pass_label": null,
+    "question": "q3_transition",
+    "title": "Transition-risk valuation shock"
+  },
+  {
+    "dataset_kind": "climate",
+    "description": "Coverage and quality of emissions data, weighted by market value.",
+    "labels": {
+      "quality": [
+        "good",
+        "fair",
+        "poor"
+      ]
+    },
+    "method_param": null,
+    "metrics": [
+      {
+        "description": "MV share with scope 1 and 2.",
+        "higher_is_worse": null,
+        "key": "coverage_scope12",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "MV share with scope 3.",
+        "higher_is_worse": null,
+        "key": "coverage_scope3",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "MV-weighted data-quality score (1 best).",
+        "higher_is_worse": true,
+        "key": "mean_data_quality",
+        "optional": false,
+        "unit": "ratio"
+      },
+      {
+        "description": "MV share with stale emissions.",
+        "higher_is_worse": true,
+        "key": "stale_share",
+        "optional": false,
+        "unit": "fraction"
+      },
+      {
+        "description": "MV share with controversy flags.",
+        "higher_is_worse": true,
+        "key": "controversy_share",
+        "optional": false,
+        "unit": "fraction"
+      }
+    ],
+    "model_id": "q3.data_quality",
+    "params": [
+      {
+        "applies_when": null,
+        "choices": null,
+        "default": 2,
+        "description": "Emissions older than as_of year minus this are stale.",
+        "maximum": 10.0,
+        "minimum": 0.0,
+        "name": "stale_years",
+        "type": "int"
+      }
+    ],
+    "pass_label": null,
+    "question": "q3_transition",
+    "title": "Climate data quality"
+  }
+]

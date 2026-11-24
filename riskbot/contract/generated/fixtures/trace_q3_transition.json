@@ -1,0 +1,123 @@
+{
+  "assumptions": [
+    "Fake model output."
+  ],
+  "input_hash": "07db2bd92f05c08fdb374d6d8c3bca326bfd36e11807c6e01c5f5adff44ab226",
+  "inputs": {
+    "params": {
+      "horizon_years": 10,
+      "include_scope3": false,
+      "missing_data": "sector_average",
+      "n_sims": 2000,
+      "price_path": "low",
+      "scenario": "orderly"
+    }
+  },
+  "model_id": "q3.transition",
+  "result": {
+    "alignment_ratio": 0.018534,
+    "carbon_price_end": 0.017534,
+    "estimated_share": 0.019534,
+    "financed_emissions": 0.016534,
+    "loss_amount": 0.014534,
+    "loss_p05": 0.012534,
+    "loss_p95": 0.013534,
+    "loss_pct": 0.011534,
+    "waci": 0.015534
+  },
+  "steps": [
+    {
+      "formula": "\\text{fake}",
+      "id": "loss_pct",
+      "note": "",
+      "substitution": "0.011534",
+      "table": null,
+      "title": "Median loss / long market value.",
+      "unit": "fraction",
+      "value": 0.011534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "loss_p05",
+      "note": "",
+      "substitution": "0.012534",
+      "table": null,
+      "title": "5th percentile of loss.",
+      "unit": "fraction",
+      "value": 0.012534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "loss_p95",
+      "note": "",
+      "substitution": "0.013534",
+      "table": null,
+      "title": "95th percentile of loss.",
+      "unit": "fraction",
+      "value": 0.013534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "loss_amount",
+      "note": "",
+      "substitution": "0.014534",
+      "table": null,
+      "title": "Median loss in currency.",
+      "unit": "currency",
+      "value": 0.014534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "waci",
+      "note": "",
+      "substitution": "0.015534",
+      "table": null,
+      "title": "Weighted average carbon intensity.",
+      "unit": "tCO2e_per_musd",
+      "value": 0.015534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "financed_emissions",
+      "note": "",
+      "substitution": "0.016534",
+      "table": null,
+      "title": "Attributed emissions.",
+      "unit": "tCO2e",
+      "value": 0.016534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "carbon_price_end",
+      "note": "",
+      "substitution": "0.017534",
+      "table": null,
+      "title": "Carbon price per tonne at the horizon.",
+      "unit": "currency",
+      "value": 0.017534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "alignment_ratio",
+      "note": "",
+      "substitution": "0.018534",
+      "table": null,
+      "title": "Intensity / pathway intensity.",
+      "unit": "ratio",
+      "value": 0.018534
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "estimated_share",
+      "note": "",
+      "substitution": "0.019534",
+      "table": null,
+      "title": "Share of financed emissions imputed.",
+      "unit": "fraction",
+      "value": 0.019534
+    }
+  ],
+  "title": "FAKE Transition-risk valuation shock",
+  "trace_id": "q3.transition-07db2bd92f05",
+  "warnings": []
+}

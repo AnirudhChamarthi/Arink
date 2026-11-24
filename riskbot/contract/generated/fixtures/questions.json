@@ -1,0 +1,138 @@
+[
+  {
+    "dataset_kind": "market",
+    "default_plan": {
+      "extras": [
+        {
+          "model_id": "q1.data_quality",
+          "params": {}
+        }
+      ],
+      "grid": {
+        "dimensions": {
+          "covariance": [
+            "sample",
+            "ledoit_wolf"
+          ],
+          "method": [
+            "normal",
+            "student_t",
+            "historical",
+            "fhs",
+            "evt",
+            "montecarlo"
+          ],
+          "window_days": [
+            250,
+            750
+          ]
+        },
+        "fixed": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5
+        },
+        "model_id": "q1.var"
+      },
+      "max_variations": 200,
+      "question": "q1_market"
+    },
+    "description": "Market tail risk under six methods, two windows and two covariance estimators, each backtested.",
+    "question": "q1_market",
+    "title": "How much could this portfolio lose in a bad week, and how far should we trust that number?"
+  },
+  {
+    "dataset_kind": "balance_sheet",
+    "default_plan": {
+      "extras": [
+        {
+          "model_id": "q2.reverse_stress",
+          "params": {
+            "target": "capital"
+          }
+        },
+        {
+          "model_id": "q2.reverse_stress",
+          "params": {
+            "target": "liquidity"
+          }
+        },
+        {
+          "model_id": "q2.data_quality",
+          "params": {}
+        }
+      ],
+      "grid": {
+        "dimensions": {
+          "htm_treatment": [
+            "at_cost",
+            "mark_to_market"
+          ],
+          "loss_severity": [
+            "base",
+            "adverse"
+          ],
+          "rate_shock_bp": [
+            -200,
+            100,
+            200,
+            300
+          ],
+          "run_speed": [
+            "slow",
+            "fast"
+          ]
+        },
+        "fixed": {},
+        "model_id": "q2.resilience"
+      },
+      "max_variations": 200,
+      "question": "q2_balance_sheet"
+    },
+    "description": "Interest-rate, credit and liquidity stress with fire sales and a reverse stress test.",
+    "question": "q2_balance_sheet",
+    "title": "Could this bank-like balance sheet survive a rate shock combined with a deposit run?"
+  },
+  {
+    "dataset_kind": "climate",
+    "default_plan": {
+      "extras": [
+        {
+          "model_id": "q3.data_quality",
+          "params": {}
+        }
+      ],
+      "grid": {
+        "dimensions": {
+          "missing_data": [
+            "sector_average",
+            "conservative",
+            "exclude"
+          ],
+          "price_path": [
+            "low",
+            "central",
+            "high"
+          ],
+          "scenario": [
+            "orderly",
+            "disorderly",
+            "hot_house"
+          ]
+        },
+        "fixed": {
+          "horizon_years": 10,
+          "include_scope3": false,
+          "n_sims": 2000
+        },
+        "model_id": "q3.transition"
+      },
+      "max_variations": 200,
+      "question": "q3_transition"
+    },
+    "description": "Carbon-price scenarios with uncertainty from missing emissions data.",
+    "question": "q3_transition",
+    "title": "How exposed is this portfolio to the low-carbon transition, and how reliable is the data?"
+  }
+]

@@ -1,0 +1,252 @@
+{
+  "$defs": {
+    "DatasetKind": {
+      "enum": [
+        "market",
+        "balance_sheet",
+        "climate"
+      ],
+      "title": "DatasetKind",
+      "type": "string"
+    },
+    "MetricSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "higher_is_worse": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Higher Is Worse"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "optional": {
+          "default": false,
+          "description": "May be absent (e.g. only when a parameter is set).",
+          "title": "Optional",
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit"
+        }
+      },
+      "required": [
+        "key",
+        "unit",
+        "description"
+      ],
+      "title": "MetricSpec",
+      "type": "object"
+    },
+    "ParamSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "applies_when": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "items": {},
+                "type": "array"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Parameter is only meaningful when every listed parameter takes one of the listed values; otherwise the planner drops it (prevents duplicate variations).",
+          "title": "Applies When"
+        },
+        "choices": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Choices"
+        },
+        "default": {
+          "default": null,
+          "title": "Default"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "float",
+            "int",
+            "str",
+            "bool"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "title": "ParamSpec",
+      "type": "object"
+    },
+    "QuestionId": {
+      "enum": [
+        "q1_market",
+        "q2_balance_sheet",
+        "q3_transition"
+      ],
+      "title": "QuestionId",
+      "type": "string"
+    },
+    "Unit": {
+      "enum": [
+        "fraction_of_gross",
+        "fraction",
+        "currency",
+        "bp",
+        "count",
+        "ratio",
+        "probability",
+        "tCO2e",
+        "tCO2e_per_musd",
+        "days",
+        "years"
+      ],
+      "title": "Unit",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "dataset_kind": {
+      "$ref": "#/$defs/DatasetKind"
+    },
+    "description": {
+      "title": "Description",
+      "type": "string"
+    },
+    "labels": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "description": "Categorical outputs and allowed values.",
+      "title": "Labels",
+      "type": "object"
+    },
+    "method_param": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Parameter whose spread measures model risk.",
+      "title": "Method Param"
+    },
+    "metrics": {
+      "items": {
+        "$ref": "#/$defs/MetricSpec"
+      },
+      "title": "Metrics",
+      "type": "array"
+    },
+    "model_id": {
+      "description": "'<question prefix>.<name>', e.g. 'q1.var'.",
+      "title": "Model Id",
+      "type": "string"
+    },
+    "params": {
+      "items": {
+        "$ref": "#/$defs/ParamSpec"
+      },
+      "title": "Params",
+      "type": "array"
+    },
+    "pass_label": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Label whose values are 'pass'/'fail'.",
+      "title": "Pass Label"
+    },
+    "question": {
+      "$ref": "#/$defs/QuestionId"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model_id",
+    "question",
+    "dataset_kind",
+    "title",
+    "description",
+    "params",
+    "metrics"
+  ],
+  "title": "ModelSpec",
+  "type": "object"
+}

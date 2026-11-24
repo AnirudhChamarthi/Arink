@@ -1,0 +1,59 @@
+{
+  "as_of": "2026-11-01",
+  "assets": [
+    {
+      "book_value": 100.0,
+      "convexity": null,
+      "coupon_rate": 0.0,
+      "hqla_level": "1",
+      "id": "cash",
+      "kind": "cash",
+      "market_value": 100.0,
+      "maturity_years": 0.0,
+      "modified_duration": null,
+      "repricing_years": 0.0
+    },
+    {
+      "book_value": 800.0,
+      "convexity": null,
+      "coupon_rate": 0.05,
+      "hqla_level": null,
+      "id": "loans",
+      "kind": "loans",
+      "market_value": 790.0,
+      "maturity_years": 5.0,
+      "modified_duration": null,
+      "repricing_years": 1.0
+    }
+  ],
+  "cet1_capital": 60.0,
+  "currency": "USD",
+  "deposits": [
+    {
+      "balance": 850.0,
+      "insured_share": 0.6,
+      "rate": 0.0,
+      "rate_beta": 0.3,
+      "runoff_fast": 0.2,
+      "runoff_slow": 0.05,
+      "segment": "retail"
+    }
+  ],
+  "governance": {},
+  "hedges": [],
+  "kind": "balance_sheet",
+  "loan_pools": [
+    {
+      "asset_correlation": 0.15,
+      "ead": 800.0,
+      "lgd": 0.4,
+      "pd": 0.02,
+      "segment": "retail"
+    }
+  ],
+  "name": "fake bank",
+  "policy_rate": 0.04,
+  "risk_weighted_assets": 700.0,
+  "synthetic": true,
+  "wholesale_funding": []
+}

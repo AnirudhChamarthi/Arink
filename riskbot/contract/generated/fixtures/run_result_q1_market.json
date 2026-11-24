@@ -1,0 +1,3907 @@
+{
+  "assessment": {
+    "factors": [
+      {
+        "control": "adequate",
+        "description": "Placeholder.",
+        "evidence": [
+          {
+            "description": "fake",
+            "kind": "note",
+            "ref": "fake"
+          }
+        ],
+        "factor_id": "fake_factor",
+        "impact": 3,
+        "inherent": "medium",
+        "likelihood": 3,
+        "name": "Fake factor",
+        "rationale": "Placeholder rationale.",
+        "residual": "low",
+        "source": "rule"
+      }
+    ],
+    "label": "judgment",
+    "method_note": "Fake assessor.",
+    "overall": "low",
+    "overrides": [],
+    "question": "q1_market"
+  },
+  "comparison": {
+    "break_evens": [],
+    "flips": [],
+    "label_counts": {},
+    "method_spread": {},
+    "metric_ranges": {
+      "es": {
+        "max": 0.057824,
+        "median": 0.034123,
+        "min": 0.012499,
+        "n": 24,
+        "unit": "fraction_of_gross"
+      },
+      "es_amount": {
+        "max": 0.059824,
+        "median": 0.036123,
+        "min": 0.014499,
+        "n": 24,
+        "unit": "currency"
+      },
+      "gross_exposure": {
+        "max": 0.060824,
+        "median": 0.037123,
+        "min": 0.015499,
+        "n": 24,
+        "unit": "currency"
+      },
+      "var": {
+        "max": 0.056824,
+        "median": 0.033123,
+        "min": 0.011499,
+        "n": 24,
+        "unit": "fraction_of_gross"
+      },
+      "var_amount": {
+        "max": 0.058824,
+        "median": 0.035123,
+        "min": 0.013499,
+        "n": 24,
+        "unit": "currency"
+      }
+    },
+    "question": "q1_market",
+    "sensitivity": []
+  },
+  "plan": {
+    "extras": [
+      {
+        "model_id": "q1.data_quality",
+        "params": {}
+      }
+    ],
+    "grid": {
+      "dimensions": {
+        "covariance": [
+          "sample",
+          "ledoit_wolf"
+        ],
+        "method": [
+          "normal",
+          "student_t",
+          "historical",
+          "fhs",
+          "evt",
+          "montecarlo"
+        ],
+        "window_days": [
+          250,
+          750
+        ]
+      },
+      "fixed": {
+        "backtest": true,
+        "bootstrap": 200,
+        "confidence": 0.99,
+        "horizon_days": 5
+      },
+      "model_id": "q1.var"
+    },
+    "max_variations": 200,
+    "question": "q1_market"
+  },
+  "run": {
+    "contract_version": "fake",
+    "created_at": "2026-11-24T12:00:00Z",
+    "dataset_name": "fake book",
+    "error": null,
+    "input_hash": "2c77c1c84319ea353a8e95908b0245bc7b4d7ae5a1c2120860881f9c0b68b35b",
+    "n_variations": 25,
+    "question": "q1_market",
+    "run_id": "run-0001",
+    "status": "awaiting_review",
+    "synthetic": true,
+    "updated_at": "2026-11-24T12:00:00Z"
+  },
+  "variations": [
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-d459a02db940",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.052475
+          },
+          "es_amount": {
+            "trace_id": "q1.var-d459a02db940",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.054475
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-d459a02db940",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.055475
+          },
+          "var": {
+            "trace_id": "q1.var-d459a02db940",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.051475
+          },
+          "var_amount": {
+            "trace_id": "q1.var-d459a02db940",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.053475
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "d459a02db9402b6eb08273d4d7af32f7596d9142fc6b99ea18e4da1b0b5ed986",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "sample",
+                "horizon_days": 5,
+                "method": "normal",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.052475,
+              "es_amount": 0.054475,
+              "gross_exposure": 0.055475,
+              "var": 0.051475,
+              "var_amount": 0.053475
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.051475",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.051475
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.052475",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.052475
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.053475",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.053475
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.054475",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.054475
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.055475",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.055475
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-d459a02db940",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 3718468521,
+        "variation_id": "v0bb81b1799"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-55e4cbf84b2d",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.027776
+          },
+          "es_amount": {
+            "trace_id": "q1.var-55e4cbf84b2d",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.029776
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-55e4cbf84b2d",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.030776
+          },
+          "var": {
+            "trace_id": "q1.var-55e4cbf84b2d",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.026776
+          },
+          "var_amount": {
+            "trace_id": "q1.var-55e4cbf84b2d",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.028776
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "55e4cbf84b2d9260cbec2efe32de142f2910c0f5dc096787a4a36578eda17945",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "ledoit_wolf",
+                "horizon_days": 5,
+                "method": "normal",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.027776,
+              "es_amount": 0.029776,
+              "gross_exposure": 0.030776,
+              "var": 0.026776,
+              "var_amount": 0.028776
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.026776",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.026776
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.027776",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.027776
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.028776",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.028776
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.029776",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.029776
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.030776",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.030776
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-55e4cbf84b2d",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 2918994876,
+        "variation_id": "vc094dec66f"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-a4adf9493ef1",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.043164
+          },
+          "es_amount": {
+            "trace_id": "q1.var-a4adf9493ef1",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.045164
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-a4adf9493ef1",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.046164
+          },
+          "var": {
+            "trace_id": "q1.var-a4adf9493ef1",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.042164
+          },
+          "var_amount": {
+            "trace_id": "q1.var-a4adf9493ef1",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.044164
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "a4adf9493ef1c0d9cb7fdeffcc3d1765c9e4ef604c3664f5a274193feb829005",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "sample",
+                "horizon_days": 5,
+                "method": "normal",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.043164,
+              "es_amount": 0.045164,
+              "gross_exposure": 0.046164,
+              "var": 0.042164,
+              "var_amount": 0.044164
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.042164",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.042164
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.043164",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.043164
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.044164",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.044164
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.045164",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.045164
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.046164",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.046164
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-a4adf9493ef1",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1914643848,
+        "variation_id": "va17d53a08d"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-07acae90400e",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.012499
+          },
+          "es_amount": {
+            "trace_id": "q1.var-07acae90400e",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.014499
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-07acae90400e",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.015499
+          },
+          "var": {
+            "trace_id": "q1.var-07acae90400e",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.011499
+          },
+          "var_amount": {
+            "trace_id": "q1.var-07acae90400e",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.013499
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "07acae90400ecdf06daadddfa7a7675d933ae25d8989d98f59dc2106a530ebc6",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "ledoit_wolf",
+                "horizon_days": 5,
+                "method": "normal",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.012499,
+              "es_amount": 0.014499,
+              "gross_exposure": 0.015499,
+              "var": 0.011499,
+              "var_amount": 0.013499
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.011499",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.011499
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.012499",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.012499
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.013499",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.013499
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.014499",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.014499
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.015499",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.015499
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-07acae90400e",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "normal",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 4096712668,
+        "variation_id": "v14919b4253"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-a4629aefaad9",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.043106
+          },
+          "es_amount": {
+            "trace_id": "q1.var-a4629aefaad9",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.045106
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-a4629aefaad9",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.046106
+          },
+          "var": {
+            "trace_id": "q1.var-a4629aefaad9",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.042106
+          },
+          "var_amount": {
+            "trace_id": "q1.var-a4629aefaad9",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.044106
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "student_t",
+          "t_dof": 5.0,
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "a4629aefaad9396c1fb609574ef8d8918a9acfa096db1d74a79c4147e4059a82",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "sample",
+                "horizon_days": 5,
+                "method": "student_t",
+                "t_dof": 5.0,
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.043106,
+              "es_amount": 0.045106,
+              "gross_exposure": 0.046106,
+              "var": 0.042106,
+              "var_amount": 0.044106
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.042106",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.042106
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.043106",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.043106
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.044106",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.044106
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.045106",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.045106
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.046106",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.046106
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-a4629aefaad9",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "student_t",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 762030141,
+        "variation_id": "v9e63e7c3e7"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-90ae742dce1f",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.039258
+          },
+          "es_amount": {
+            "trace_id": "q1.var-90ae742dce1f",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.041258
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-90ae742dce1f",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.042258
+          },
+          "var": {
+            "trace_id": "q1.var-90ae742dce1f",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.038258
+          },
+          "var_amount": {
+            "trace_id": "q1.var-90ae742dce1f",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.040258
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "student_t",
+          "t_dof": 5.0,
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "90ae742dce1faacef39c1d56c753eea1c98a9581dda8d25a71991c04272f1600",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "ledoit_wolf",
+                "horizon_days": 5,
+                "method": "student_t",
+                "t_dof": 5.0,
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.039258,
+              "es_amount": 0.041258,
+              "gross_exposure": 0.042258,
+              "var": 0.038258,
+              "var_amount": 0.040258
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.038258",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.038258
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.039258",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.039258
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.040258",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.040258
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.041258",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.041258
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.042258",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.042258
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-90ae742dce1f",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "student_t",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 3452404902,
+        "variation_id": "v7a8ef40412"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-170b9c7267cc",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.015501
+          },
+          "es_amount": {
+            "trace_id": "q1.var-170b9c7267cc",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.017501
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-170b9c7267cc",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.018501
+          },
+          "var": {
+            "trace_id": "q1.var-170b9c7267cc",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.014501
+          },
+          "var_amount": {
+            "trace_id": "q1.var-170b9c7267cc",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.016501
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "student_t",
+          "t_dof": 5.0,
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "170b9c7267cc183f6b5f4807f92b58de45a67c0ea831ebb2612b818972a5978e",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "sample",
+                "horizon_days": 5,
+                "method": "student_t",
+                "t_dof": 5.0,
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.015501,
+              "es_amount": 0.017501,
+              "gross_exposure": 0.018501,
+              "var": 0.014501,
+              "var_amount": 0.016501
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.014501",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.014501
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.015501",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.015501
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.016501",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.016501
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.017501",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.017501
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.018501",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.018501
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-170b9c7267cc",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "student_t",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 3470649197,
+        "variation_id": "vb1293cb12b"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-69bf686f6a4f",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.031654
+          },
+          "es_amount": {
+            "trace_id": "q1.var-69bf686f6a4f",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.033654
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-69bf686f6a4f",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.034654
+          },
+          "var": {
+            "trace_id": "q1.var-69bf686f6a4f",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.030654
+          },
+          "var_amount": {
+            "trace_id": "q1.var-69bf686f6a4f",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.032654
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "student_t",
+          "t_dof": 5.0,
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "69bf686f6a4f411a3bbdeb3e3641125952861ebb13a3277e00fa23c3021fbd5e",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "ledoit_wolf",
+                "horizon_days": 5,
+                "method": "student_t",
+                "t_dof": 5.0,
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.031654,
+              "es_amount": 0.033654,
+              "gross_exposure": 0.034654,
+              "var": 0.030654,
+              "var_amount": 0.032654
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.030654",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.030654
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.031654",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.031654
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.032654",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.032654
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.033654",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.033654
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.034654",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.034654
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-69bf686f6a4f",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "student_t",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 3321945118,
+        "variation_id": "v186602819d"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-58e4c2d296b9",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.028362
+          },
+          "es_amount": {
+            "trace_id": "q1.var-58e4c2d296b9",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.030362
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-58e4c2d296b9",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.031362
+          },
+          "var": {
+            "trace_id": "q1.var-58e4c2d296b9",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.027362
+          },
+          "var_amount": {
+            "trace_id": "q1.var-58e4c2d296b9",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.029362
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "58e4c2d296b9ac60839473208667edd2407f727559825fc24cb938ad38837ae3",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "historical",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.028362,
+              "es_amount": 0.030362,
+              "gross_exposure": 0.031362,
+              "var": 0.027362,
+              "var_amount": 0.029362
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.027362",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.027362
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.028362",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.028362
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.029362",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.029362
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.030362",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.030362
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.031362",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.031362
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-58e4c2d296b9",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 2618494848,
+        "variation_id": "vc6de256b60"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-3cb75c531ad8",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.022859
+          },
+          "es_amount": {
+            "trace_id": "q1.var-3cb75c531ad8",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.024859
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-3cb75c531ad8",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.025859
+          },
+          "var": {
+            "trace_id": "q1.var-3cb75c531ad8",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.021859
+          },
+          "var_amount": {
+            "trace_id": "q1.var-3cb75c531ad8",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.023859
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "3cb75c531ad8cd940b328992f1d87cf23c8d07ac8ebbc29eadf4f94572c2336c",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "historical",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.022859,
+              "es_amount": 0.024859,
+              "gross_exposure": 0.025859,
+              "var": 0.021859,
+              "var_amount": 0.023859
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.021859",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.021859
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.022859",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.022859
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.023859",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.023859
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.024859",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.024859
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.025859",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.025859
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-3cb75c531ad8",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 3543233818,
+        "variation_id": "va05d67a207"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-82f76c6130cf",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.036579
+          },
+          "es_amount": {
+            "trace_id": "q1.var-82f76c6130cf",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.038579
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-82f76c6130cf",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.039579
+          },
+          "var": {
+            "trace_id": "q1.var-82f76c6130cf",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.035579
+          },
+          "var_amount": {
+            "trace_id": "q1.var-82f76c6130cf",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.037579
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "82f76c6130cf9819b5b6f3612b80d02815ee85e1f96c78471931e925c8094ba6",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "historical",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.036579,
+              "es_amount": 0.038579,
+              "gross_exposure": 0.039579,
+              "var": 0.035579,
+              "var_amount": 0.037579
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.035579",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.035579
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.036579",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.036579
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.037579",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.037579
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.038579",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.038579
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.039579",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.039579
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-82f76c6130cf",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1083779480,
+        "variation_id": "v1f21ba6d59"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-746970cad332",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.033737
+          },
+          "es_amount": {
+            "trace_id": "q1.var-746970cad332",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.035737
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-746970cad332",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.036737
+          },
+          "var": {
+            "trace_id": "q1.var-746970cad332",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.032737
+          },
+          "var_amount": {
+            "trace_id": "q1.var-746970cad332",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.034737
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "746970cad33218fe60dd6c21f49725462cda395fd8aea50a940591af25e5eaed",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "historical",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.033737,
+              "es_amount": 0.035737,
+              "gross_exposure": 0.036737,
+              "var": 0.032737,
+              "var_amount": 0.034737
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.032737",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.032737
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.033737",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.033737
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.034737",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.034737
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.035737",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.035737
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.036737",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.036737
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-746970cad332",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "historical",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1969993714,
+        "variation_id": "v8180467992"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-1a601c359d39",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.016151
+          },
+          "es_amount": {
+            "trace_id": "q1.var-1a601c359d39",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.018151
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-1a601c359d39",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.019151
+          },
+          "var": {
+            "trace_id": "q1.var-1a601c359d39",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.015151
+          },
+          "var_amount": {
+            "trace_id": "q1.var-1a601c359d39",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.017151
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "1a601c359d39843a8fd47d17c3d1ddd05283532fcdf3586df3c3f3cc136384fe",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "fhs",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.016151,
+              "es_amount": 0.018151,
+              "gross_exposure": 0.019151,
+              "var": 0.015151,
+              "var_amount": 0.017151
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.015151",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.015151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.016151",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.016151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.017151",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.017151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.018151",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.018151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.019151",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.019151
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-1a601c359d39",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 2638257687,
+        "variation_id": "ve62d0f98f7"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-45f6ed7bb740",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.024665
+          },
+          "es_amount": {
+            "trace_id": "q1.var-45f6ed7bb740",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.026665
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-45f6ed7bb740",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.027665
+          },
+          "var": {
+            "trace_id": "q1.var-45f6ed7bb740",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.023665
+          },
+          "var_amount": {
+            "trace_id": "q1.var-45f6ed7bb740",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.025665
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "45f6ed7bb7409329c6689038fc3f1ba467d105a4b3a56c3581084e99bd9aff8e",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "fhs",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.024665,
+              "es_amount": 0.026665,
+              "gross_exposure": 0.027665,
+              "var": 0.023665,
+              "var_amount": 0.025665
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.023665",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.023665
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.024665",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.024665
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.025665",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.025665
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.026665",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.026665
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.027665",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.027665
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-45f6ed7bb740",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 235585646,
+        "variation_id": "v4e5378167e"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-7663b9c1c100",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.034123
+          },
+          "es_amount": {
+            "trace_id": "q1.var-7663b9c1c100",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.036123
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-7663b9c1c100",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.037123
+          },
+          "var": {
+            "trace_id": "q1.var-7663b9c1c100",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.033123
+          },
+          "var_amount": {
+            "trace_id": "q1.var-7663b9c1c100",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.035123
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "7663b9c1c100516d44ea48b7e33ff8c3737c4bdebfa5541c9fef375f9f37c70e",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "fhs",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.034123,
+              "es_amount": 0.036123,
+              "gross_exposure": 0.037123,
+              "var": 0.033123,
+              "var_amount": 0.035123
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.033123",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.033123
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.034123",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.034123
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.035123",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.035123
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.036123",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.036123
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.037123",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.037123
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-7663b9c1c100",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 712534999,
+        "variation_id": "v8c480b8df5"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-c84e93fccfcb",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.050122
+          },
+          "es_amount": {
+            "trace_id": "q1.var-c84e93fccfcb",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.052122
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-c84e93fccfcb",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.053122
+          },
+          "var": {
+            "trace_id": "q1.var-c84e93fccfcb",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.049122
+          },
+          "var_amount": {
+            "trace_id": "q1.var-c84e93fccfcb",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.051122
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "c84e93fccfcb81818863fefcdd70e552b3646120cf619898a962af3960b22e31",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "horizon_days": 5,
+                "method": "fhs",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.050122,
+              "es_amount": 0.052122,
+              "gross_exposure": 0.053122,
+              "var": 0.049122,
+              "var_amount": 0.051122
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.049122",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.049122
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.050122",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.050122
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.051122",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.051122
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.052122",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.052122
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.053122",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.053122
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-c84e93fccfcb",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "fhs",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 886210375,
+        "variation_id": "vaefc998407"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-33f92fdc8eee",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.021151
+          },
+          "es_amount": {
+            "trace_id": "q1.var-33f92fdc8eee",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.023151
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-33f92fdc8eee",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.024151
+          },
+          "var": {
+            "trace_id": "q1.var-33f92fdc8eee",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.020151
+          },
+          "var_amount": {
+            "trace_id": "q1.var-33f92fdc8eee",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.022151
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "evt_threshold_quantile": 0.9,
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "33f92fdc8eee6947035304b83bfd906386f0a20f6e9aabd3b59d2ba422ff1270",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "evt_threshold_quantile": 0.9,
+                "horizon_days": 5,
+                "method": "evt",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.021151,
+              "es_amount": 0.023151,
+              "gross_exposure": 0.024151,
+              "var": 0.020151,
+              "var_amount": 0.022151
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.020151",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.020151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.021151",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.021151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.022151",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.022151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.023151",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.023151
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.024151",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.024151
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-33f92fdc8eee",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 991432579,
+        "variation_id": "v693c6f0196"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-92dedcd9350f",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.039686
+          },
+          "es_amount": {
+            "trace_id": "q1.var-92dedcd9350f",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.041686
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-92dedcd9350f",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.042686
+          },
+          "var": {
+            "trace_id": "q1.var-92dedcd9350f",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.038686
+          },
+          "var_amount": {
+            "trace_id": "q1.var-92dedcd9350f",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.040686
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "evt_threshold_quantile": 0.9,
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "92dedcd9350f86ee1d54baabac7b7b88cefa06892b98e2d032cdcc5f52feb673",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "evt_threshold_quantile": 0.9,
+                "horizon_days": 5,
+                "method": "evt",
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.039686,
+              "es_amount": 0.041686,
+              "gross_exposure": 0.042686,
+              "var": 0.038686,
+              "var_amount": 0.040686
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.038686",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.038686
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.039686",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.039686
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.040686",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.040686
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.041686",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.041686
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.042686",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.042686
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-92dedcd9350f",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 4149282715,
+        "variation_id": "v60b0c9785e"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-b83767787159",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.04698
+          },
+          "es_amount": {
+            "trace_id": "q1.var-b83767787159",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.04898
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-b83767787159",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.04998
+          },
+          "var": {
+            "trace_id": "q1.var-b83767787159",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.04598
+          },
+          "var_amount": {
+            "trace_id": "q1.var-b83767787159",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.04798
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "evt_threshold_quantile": 0.9,
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "b83767787159afc6a366b05da2746be154158489372842ea2f3674a29fbb5c8b",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "evt_threshold_quantile": 0.9,
+                "horizon_days": 5,
+                "method": "evt",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.04698,
+              "es_amount": 0.04898,
+              "gross_exposure": 0.04998,
+              "var": 0.04598,
+              "var_amount": 0.04798
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.04598",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.04598
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.04698",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.04698
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.04798",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.04798
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.04898",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.04898
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.04998",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.04998
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-b83767787159",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1463767086,
+        "variation_id": "va2d522bdc6"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-74c193fb65b2",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.033804
+          },
+          "es_amount": {
+            "trace_id": "q1.var-74c193fb65b2",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.035804
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-74c193fb65b2",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.036804
+          },
+          "var": {
+            "trace_id": "q1.var-74c193fb65b2",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.032804
+          },
+          "var_amount": {
+            "trace_id": "q1.var-74c193fb65b2",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.034804
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "evt_threshold_quantile": 0.9,
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "74c193fb65b28a9fee4429ea02844728f8ba26bd8d759caf05a7d556711c7297",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "evt_threshold_quantile": 0.9,
+                "horizon_days": 5,
+                "method": "evt",
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.033804,
+              "es_amount": 0.035804,
+              "gross_exposure": 0.036804,
+              "var": 0.032804,
+              "var_amount": 0.034804
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.032804",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.032804
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.033804",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.033804
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.034804",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.034804
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.035804",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.035804
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.036804",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.036804
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-74c193fb65b2",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "evt",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1722470816,
+        "variation_id": "v0730d4c380"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-efbda93254c4",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.057824
+          },
+          "es_amount": {
+            "trace_id": "q1.var-efbda93254c4",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.059824
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-efbda93254c4",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.060824
+          },
+          "var": {
+            "trace_id": "q1.var-efbda93254c4",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.056824
+          },
+          "var_amount": {
+            "trace_id": "q1.var-efbda93254c4",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.058824
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "n_sims": 20000,
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "efbda93254c4e3548f0375c9575921c83a45485d385383a5f25fb57bd5187e44",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "sample",
+                "horizon_days": 5,
+                "method": "montecarlo",
+                "n_sims": 20000,
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.057824,
+              "es_amount": 0.059824,
+              "gross_exposure": 0.060824,
+              "var": 0.056824,
+              "var_amount": 0.058824
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.056824",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.056824
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.057824",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.057824
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.058824",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.058824
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.059824",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.059824
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.060824",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.060824
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-efbda93254c4",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1903321917,
+        "variation_id": "veaa6606da7"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-bf993580fb8e",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.048422
+          },
+          "es_amount": {
+            "trace_id": "q1.var-bf993580fb8e",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.050422
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-bf993580fb8e",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.051422
+          },
+          "var": {
+            "trace_id": "q1.var-bf993580fb8e",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.047422
+          },
+          "var_amount": {
+            "trace_id": "q1.var-bf993580fb8e",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.049422
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "n_sims": 20000,
+          "window_days": 250
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "bf993580fb8ef576231de1ff749adbb982b65a7e46f49c6c21ee18832989ec5d",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "ledoit_wolf",
+                "horizon_days": 5,
+                "method": "montecarlo",
+                "n_sims": 20000,
+                "window_days": 250
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.048422,
+              "es_amount": 0.050422,
+              "gross_exposure": 0.051422,
+              "var": 0.047422,
+              "var_amount": 0.049422
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.047422",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.047422
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.048422",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.048422
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.049422",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.049422
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.050422",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.050422
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.051422",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.051422
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-bf993580fb8e",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "window_days": 250
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1176755163,
+        "variation_id": "vea3c006f62"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "pass",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-586fdefae437",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.028273
+          },
+          "es_amount": {
+            "trace_id": "q1.var-586fdefae437",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.030273
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-586fdefae437",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.031273
+          },
+          "var": {
+            "trace_id": "q1.var-586fdefae437",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.027273
+          },
+          "var_amount": {
+            "trace_id": "q1.var-586fdefae437",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.029273
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "n_sims": 20000,
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "586fdefae437ff19bd7b4780ebd1bd7f42b8ca48758e08cb48cc552913244320",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "sample",
+                "horizon_days": 5,
+                "method": "montecarlo",
+                "n_sims": 20000,
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.028273,
+              "es_amount": 0.030273,
+              "gross_exposure": 0.031273,
+              "var": 0.027273,
+              "var_amount": 0.029273
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.027273",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.027273
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.028273",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.028273
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.029273",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.029273
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.030273",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.030273
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.031273",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.031273
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-586fdefae437",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "sample",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 314839604,
+        "variation_id": "v3166519c55"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "backtest_verdict": "fail",
+          "basel_zone": "green"
+        },
+        "metrics": {
+          "es": {
+            "trace_id": "q1.var-b4f1b897bcae",
+            "trace_step": "es",
+            "unit": "fraction_of_gross",
+            "value": 0.046341
+          },
+          "es_amount": {
+            "trace_id": "q1.var-b4f1b897bcae",
+            "trace_step": "es_amount",
+            "unit": "currency",
+            "value": 0.048341
+          },
+          "gross_exposure": {
+            "trace_id": "q1.var-b4f1b897bcae",
+            "trace_step": "gross_exposure",
+            "unit": "currency",
+            "value": 0.049341
+          },
+          "var": {
+            "trace_id": "q1.var-b4f1b897bcae",
+            "trace_step": "var",
+            "unit": "fraction_of_gross",
+            "value": 0.045341
+          },
+          "var_amount": {
+            "trace_id": "q1.var-b4f1b897bcae",
+            "trace_step": "var_amount",
+            "unit": "currency",
+            "value": 0.047341
+          }
+        },
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "n_sims": 20000,
+          "window_days": 750
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "b4f1b897bcaeeabfe1eb362561cc2e18b5fd77d07b7f274f75f4be7af655faca",
+            "inputs": {
+              "params": {
+                "backtest": true,
+                "bootstrap": 200,
+                "confidence": 0.99,
+                "covariance": "ledoit_wolf",
+                "horizon_days": 5,
+                "method": "montecarlo",
+                "n_sims": 20000,
+                "window_days": 750
+              }
+            },
+            "model_id": "q1.var",
+            "result": {
+              "es": 0.046341,
+              "es_amount": 0.048341,
+              "gross_exposure": 0.049341,
+              "var": 0.045341,
+              "var_amount": 0.047341
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "var",
+                "note": "",
+                "substitution": "0.045341",
+                "table": null,
+                "title": "Value at Risk.",
+                "unit": "fraction_of_gross",
+                "value": 0.045341
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es",
+                "note": "",
+                "substitution": "0.046341",
+                "table": null,
+                "title": "Expected shortfall.",
+                "unit": "fraction_of_gross",
+                "value": 0.046341
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "var_amount",
+                "note": "",
+                "substitution": "0.047341",
+                "table": null,
+                "title": "VaR x gross exposure.",
+                "unit": "currency",
+                "value": 0.047341
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "es_amount",
+                "note": "",
+                "substitution": "0.048341",
+                "table": null,
+                "title": "ES x gross exposure.",
+                "unit": "currency",
+                "value": 0.048341
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "gross_exposure",
+                "note": "",
+                "substitution": "0.049341",
+                "table": null,
+                "title": "Sum of |market value|.",
+                "unit": "currency",
+                "value": 0.049341
+              }
+            ],
+            "title": "FAKE Portfolio VaR and expected shortfall",
+            "trace_id": "q1.var-b4f1b897bcae",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.var",
+        "params": {
+          "backtest": true,
+          "bootstrap": 200,
+          "confidence": 0.99,
+          "covariance": "ledoit_wolf",
+          "horizon_days": 5,
+          "method": "montecarlo",
+          "window_days": 750
+        },
+        "question": "q1_market",
+        "role": "grid",
+        "seed": 1215028230,
+        "variation_id": "vc272b7f424"
+      }
+    },
+    {
+      "duration_ms": 1.0,
+      "error": null,
+      "output": {
+        "findings": [],
+        "labels": {
+          "quality": "good"
+        },
+        "metrics": {
+          "history_days": {
+            "trace_id": "q1.data_quality-11259ebe2800",
+            "trace_step": "history_days",
+            "unit": "days",
+            "value": 0.014349
+          },
+          "missing_share": {
+            "trace_id": "q1.data_quality-11259ebe2800",
+            "trace_step": "missing_share",
+            "unit": "fraction",
+            "value": 0.015349
+          },
+          "n_positions": {
+            "trace_id": "q1.data_quality-11259ebe2800",
+            "trace_step": "n_positions",
+            "unit": "count",
+            "value": 0.013349
+          },
+          "outlier_count": {
+            "trace_id": "q1.data_quality-11259ebe2800",
+            "trace_step": "outlier_count",
+            "unit": "count",
+            "value": 0.017349
+          },
+          "stale_series": {
+            "trace_id": "q1.data_quality-11259ebe2800",
+            "trace_step": "stale_series",
+            "unit": "count",
+            "value": 0.016349
+          }
+        },
+        "model_id": "q1.data_quality",
+        "params": {
+          "stale_days": 5
+        },
+        "traces": [
+          {
+            "assumptions": [
+              "Fake model output."
+            ],
+            "input_hash": "11259ebe2800dc6a895f701432dc25be5ca4121caf7c4e03757da59ae3b4b495",
+            "inputs": {
+              "params": {
+                "stale_days": 5
+              }
+            },
+            "model_id": "q1.data_quality",
+            "result": {
+              "history_days": 0.014349,
+              "missing_share": 0.015349,
+              "n_positions": 0.013349,
+              "outlier_count": 0.017349,
+              "stale_series": 0.016349
+            },
+            "steps": [
+              {
+                "formula": "\\text{fake}",
+                "id": "n_positions",
+                "note": "",
+                "substitution": "0.013349",
+                "table": null,
+                "title": "Positions.",
+                "unit": "count",
+                "value": 0.013349
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "history_days",
+                "note": "",
+                "substitution": "0.014349",
+                "table": null,
+                "title": "Length of the return history.",
+                "unit": "days",
+                "value": 0.014349
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "missing_share",
+                "note": "",
+                "substitution": "0.015349",
+                "table": null,
+                "title": "Missing return values / all values.",
+                "unit": "fraction",
+                "value": 0.015349
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "stale_series",
+                "note": "",
+                "substitution": "0.016349",
+                "table": null,
+                "title": "Series with a stale run.",
+                "unit": "count",
+                "value": 0.016349
+              },
+              {
+                "formula": "\\text{fake}",
+                "id": "outlier_count",
+                "note": "",
+                "substitution": "0.017349",
+                "table": null,
+                "title": "Outlier returns.",
+                "unit": "count",
+                "value": 0.017349
+              }
+            ],
+            "title": "FAKE Market data quality",
+            "trace_id": "q1.data_quality-11259ebe2800",
+            "warnings": []
+          }
+        ],
+        "warnings": []
+      },
+      "spec": {
+        "model_id": "q1.data_quality",
+        "params": {},
+        "question": "q1_market",
+        "role": "extra",
+        "seed": 1487888647,
+        "variation_id": "v6bda9125df"
+      }
+    }
+  ],
+  "verifier_findings": []
+}

@@ -1,0 +1,80 @@
+{
+  "assumptions": [
+    "Fake model output."
+  ],
+  "input_hash": "d459a02db9402b6eb08273d4d7af32f7596d9142fc6b99ea18e4da1b0b5ed986",
+  "inputs": {
+    "params": {
+      "backtest": true,
+      "bootstrap": 200,
+      "confidence": 0.99,
+      "covariance": "sample",
+      "horizon_days": 5,
+      "method": "normal",
+      "window_days": 250
+    }
+  },
+  "model_id": "q1.var",
+  "result": {
+    "es": 0.052475,
+    "es_amount": 0.054475,
+    "gross_exposure": 0.055475,
+    "var": 0.051475,
+    "var_amount": 0.053475
+  },
+  "steps": [
+    {
+      "formula": "\\text{fake}",
+      "id": "var",
+      "note": "",
+      "substitution": "0.051475",
+      "table": null,
+      "title": "Value at Risk.",
+      "unit": "fraction_of_gross",
+      "value": 0.051475
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "es",
+      "note": "",
+      "substitution": "0.052475",
+      "table": null,
+      "title": "Expected shortfall.",
+      "unit": "fraction_of_gross",
+      "value": 0.052475
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "var_amount",
+      "note": "",
+      "substitution": "0.053475",
+      "table": null,
+      "title": "VaR x gross exposure.",
+      "unit": "currency",
+      "value": 0.053475
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "es_amount",
+      "note": "",
+      "substitution": "0.054475",
+      "table": null,
+      "title": "ES x gross exposure.",
+      "unit": "currency",
+      "value": 0.054475
+    },
+    {
+      "formula": "\\text{fake}",
+      "id": "gross_exposure",
+      "note": "",
+      "substitution": "0.055475",
+      "table": null,
+      "title": "Sum of |market value|.",
+      "unit": "currency",
+      "value": 0.055475
+    }
+  ],
+  "title": "FAKE Portfolio VaR and expected shortfall",
+  "trace_id": "q1.var-d459a02db940",
+  "warnings": []
+}
