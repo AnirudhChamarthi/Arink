@@ -41,7 +41,7 @@ from .errors import InternalErrorMiddleware, install_error_handlers
 from .limits import BodySizeLimitMiddleware, check_dataset_limits, check_plan_limits
 
 PREFIX = "/v2"
-DEFAULT_CORS_ORIGINS = ["http://localhost:5173"]
+DEFAULT_CORS_ORIGINS = ["http://localhost:5173", "http://localhost:4173"]
 API_TITLE = "Riskbot v2 API"
 
 
@@ -195,7 +195,7 @@ def create_app(service: RunService, *, cors_origins: list[str] | None = None) ->
     Args:
         service: any implementation of ``contract.ports.RunService`` (LangGraph orchestration in
             production, ``contract.fakes.FakeRunService`` in tests).
-        cors_origins: allowed browser origins; defaults to ``["http://localhost:5173"]`` (Vite dev server).
+        cors_origins: allowed browser origins; defaults to the Vite dev server (5173) and preview server (4173) on localhost.
 
     Returns:
         A FastAPI app with routes under ``/v2``, OpenAPI at ``/v2/openapi.json`` and docs at ``/v2/docs``.

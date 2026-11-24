@@ -4,7 +4,20 @@ Riskbot is a **portfolio risk workstation**: a Windows WPF desktop client talks 
 
 ## Roadmap: Riskbot v2 (executive summary)
 
-> Status: **planning**. The application described below is under construction on the `minorTests` branch; the current release is the v1 workstation documented in the rest of this README.
+> Status: **first working version** on the `v2` branch (all three questions run end to end through the web UI, REST API and MCP server on synthetic sample data). The v1 workstation documented further down remains in the repository.
+
+**Run v2 locally**
+
+```bash
+pip install -e ".[dev]"                     # Python 3.11+
+python -m riskbot.app demo                  # all three questions on sample data, printed headlines
+python -m riskbot.app api --port 8000       # REST API (docs at http://localhost:8000/v2/docs)
+cd web && npm install && npm run dev        # web UI at http://localhost:5173 (talks to the API)
+python -m riskbot.app mcp                   # MCP server over stdio for Claude Desktop / Claude Code
+python -m pytest riskbot                    # Python test suite; `cd web && npm test` for the UI
+```
+
+The contract that links every component, and the rules each one follows, are in [riskbot/contract/CONTRACT.md](riskbot/contract/CONTRACT.md).
 
 **What v2 is.** A risk-analysis service that answers three hard risk questions with transparent, checkable math, usable both by an analyst through a web UI and by other applications and AI agents through a REST API and an MCP server.
 

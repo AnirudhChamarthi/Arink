@@ -7,7 +7,7 @@ contract type it gets back. The app holds no state of its own.
 ```python
 from riskbot.api import create_app
 
-app = create_app(service)                                  # CORS: http://localhost:5173
+app = create_app(service)                                  # CORS: http://localhost:5173 and :4173
 app = create_app(service, cors_origins=["https://ui.example"])
 ```
 
