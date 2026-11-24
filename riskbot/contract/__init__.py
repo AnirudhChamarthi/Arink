@@ -15,4 +15,4 @@ fakes        deterministic test doubles of every port (tests only)
 See CONTRACT.md for the full specification, ownership and change process.
 """
 
-CONTRACT_VERSION = "2.0.0"
+CONTRACT_VERSION = "2.0.1"

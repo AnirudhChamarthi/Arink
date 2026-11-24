@@ -1,4 +1,4 @@
-# Riskbot v2 contract (version 2.0.0)
+# Riskbot v2 contract (version 2.0.1)
 
 This document and the Python package `riskbot/contract/` together are the contract that links every
 component. The code is authoritative where the two differ; report any difference as a contract issue.
@@ -220,3 +220,6 @@ integrator decides, bumps `CONTRACT_VERSION`, regenerates `contract/generated/` 
 
 ## Changelog
 - 2.0.0 (2026-11-24): initial contract.
+- 2.0.1 (2026-11-24): q1.data_quality outlier rule changed from a global raw-MAD threshold (flagged ~200 genuine
+  stress-period returns on the sample) to 10 robust sigmas around a centred 63-day rolling median (requested by the
+  market component).

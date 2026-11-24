@@ -87,6 +87,11 @@ def test_sample_dataset_findings():
 
 def test_helpers():
     assert longest_zero_run(np.array([0, 0, 1, 0, 0, 0, np.nan, 0.0])) == 3
-    x = np.array([0.0, 1, -1, 2, -2, 1, -1, 50])  # median 0, MAD 1
-    assert outlier_mask(x).tolist() == [False] * 7 + [True]
-    assert not outlier_mask(np.zeros(10)).any()  # MAD = 0 -> no outliers
+    rng = np.random.default_rng(0)
+    x = rng.normal(0, 0.01, 200)
+    x[100] = 0.25  # an isolated data error: flagged
+    assert np.flatnonzero(outlier_mask(x)).tolist() == [100]
+    regime = np.concatenate([rng.normal(0, 0.01, 150), rng.normal(0, 0.03, 150)])  # volatility tripling
+    assert outlier_mask(regime).sum() <= 1  # a genuine regime change is not a data error
+    assert not outlier_mask(np.zeros(100)).any()  # MAD = 0 -> no outliers
+    assert not outlier_mask(np.array([0.0, 1, 50])).any()  # too few observations

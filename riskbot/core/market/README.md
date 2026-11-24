@@ -212,12 +212,12 @@ The checks run over the return series of held non-cash tickers.
 |---|---|---|
 | missing | count of `None` values; $\text{missing\_share}=\#\text{missing}/(n\cdot k)$ | `missing_returns` (warning), one per ticker |
 | stale | longest run of returns exactly 0 is at least `stale_days` | `stale_series` (warning) |
-| outliers | $\lvert r_t-\text{med}(r)\rvert > 8\,\text{MAD}$, $\text{MAD}=\text{med}\lvert r_t-\text{med}(r)\rvert$ (raw MAD, as in the catalogue) | `outlier_returns` (warning), one per ticker |
+| outliers | $\lvert r_t-m_t\rvert > 10\cdot 1.4826\,\text{MAD}_t$ with rolling median $m_t$ and $\text{MAD}_t$ over a centred 63-day window (≥ 20 values; contract 2.0.1) | `outlier_returns` (warning), one per ticker |
 | short history | fewer than 250 non-missing values | `short_history` (error) |
 
 Label: `poor` if missing_share > 5% or any series is short; `fair` if any finding is a warning; else `good`.
-*Limitation:* with the raw MAD, 8 MAD is about 5.4 Gaussian sigmas. On fat-tailed data with a stress episode,
-many genuine returns are flagged (about 200 on the sample dataset). See `CONTRACT_REQUESTS.md` §1.
+*Note:* the original global raw-MAD rule flagged about 200 genuine stress-period returns on the sample; the rolling
+rule (contract 2.0.1) flags returns that are extreme relative to local volatility, i.e. likely data errors.
 
 ## 7. Sample dataset (`sample_dataset(seed=0)`)
 

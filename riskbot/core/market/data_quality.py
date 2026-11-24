@@ -4,8 +4,10 @@ Checks (per return series of a held, non-cash ticker)
 -----------------------------------------------------
 * missing: count of ``None`` values; ``missing_share`` = missing / all values over held series.
 * stale: a run of at least ``stale_days`` consecutive returns exactly equal to 0 (a frozen price).
-* outliers: :math:`|r_t-\\mathrm{med}(r)|>8\\,\\mathrm{MAD}`, :math:`\\mathrm{MAD}=\\mathrm{med}|r_t-\\mathrm{med}(r)|`
-  (raw MAD, no 1.4826 consistency factor; missing values ignored).
+* outliers (contract 2.0.1): :math:`|r_t-m_t|>10\\cdot1.4826\\,\\mathrm{MAD}_t`, where :math:`m_t` and
+  :math:`\\mathrm{MAD}_t` are the median and median absolute deviation over a centred 63-day window (at least 20
+  finite values; missing values ignored). The local window measures each return against current volatility, so a
+  genuine stress regime is not flagged while isolated data errors are.
 * short history: fewer than 250 non-missing values.
 
 Label ``quality``: ``poor`` if missing_share > 5% or any series has < 250 values; ``fair`` if any finding has
@@ -26,7 +28,10 @@ from riskbot.contract.types import DataQualityFinding, ModelOutput, Severity, Ta
 
 from ._data import as_market_dataset
 
-OUTLIER_MADS = 8.0
+OUTLIER_MADS = 10.0
+MAD_TO_SIGMA = 1.4826
+OUTLIER_WINDOW = 63
+OUTLIER_MIN_OBS = 20
 MIN_SERIES_DAYS = 250
 POOR_MISSING_SHARE = 0.05
 
@@ -43,18 +48,27 @@ def longest_zero_run(x: np.ndarray) -> int:
     return best
 
 
-def outlier_mask(x: np.ndarray, k: float = OUTLIER_MADS) -> np.ndarray:
-    """Boolean mask of :math:`|x-\\mathrm{med}|>k\\,\\mathrm{MAD}` over finite values (False where MAD = 0)."""
-    finite = np.isfinite(x)
-    mask = np.zeros(x.shape, dtype=bool)
-    if finite.sum() < 3:
-        return mask
-    v = x[finite]
-    med = np.median(v)
-    mad = np.median(np.abs(v - med))
-    if mad <= 0:
-        return mask
-    mask[finite] = np.abs(v - med) > k * mad
+def outlier_mask(x: np.ndarray, k: float = OUTLIER_MADS, window: int = OUTLIER_WINDOW) -> np.ndarray:
+    """Boolean mask of returns more than ``k`` robust sigmas from a centred rolling median.
+
+    For each day t the median :math:`m_t` and :math:`\\mathrm{MAD}_t` are taken over the finite values in the
+    centred window of ``window`` days (clipped at the ends); the robust sigma is ``1.4826 * MAD_t`` (consistent
+    for normal data). Days with fewer than ``OUTLIER_MIN_OBS`` finite neighbours, or MAD = 0, are never flagged.
+    """
+    n = x.size
+    mask = np.zeros(n, dtype=bool)
+    half = window // 2
+    for t in range(n):
+        if not np.isfinite(x[t]):
+            continue
+        w = x[max(0, t - half): t + half + 1]
+        w = w[np.isfinite(w)]
+        if w.size < OUTLIER_MIN_OBS:
+            continue
+        med = np.median(w)
+        sigma = MAD_TO_SIGMA * np.median(np.abs(w - med))
+        if sigma > 0 and abs(x[t] - med) > k * sigma:
+            mask[t] = True
     return mask
 
 
@@ -71,7 +85,7 @@ class DataQualityModel:
         tb = TraceBuilder(mid, "Market data quality", model_input_hash(mid, ds, eff, seed),
                           assumptions=["Only return series of held non-cash positions are checked.",
                                        "A run of exactly-zero returns indicates a stale (frozen) price.",
-                                       "Outliers: |r - median| > 8 x raw MAD per series."],
+                                       "Outliers: |r - rolling median| > 10 robust sigmas (1.4826 x MAD over a centred 63-day window)."],
                           inputs={"params": eff, "seed": seed, "dataset": ds.name, "synthetic": ds.synthetic})
         findings: list[DataQualityFinding] = []
         held = []
@@ -106,7 +120,7 @@ class DataQualityModel:
                 dates = [ds.dates[i].isoformat() for i in np.flatnonzero(om)][:5]
                 findings.append(DataQualityFinding(check="outlier_returns", severity=Severity.WARNING, field="returns",
                                                    subject=t, count=n_out,
-                                                   message=f"{t}: {n_out} return(s) beyond 8 MAD from the median "
+                                                   message=f"{t}: {n_out} return(s) beyond 10 robust sigmas from the rolling median "
                                                            f"(first: {', '.join(dates)})."))
             if valid < MIN_SERIES_DAYS:
                 short += 1

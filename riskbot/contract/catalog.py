@@ -98,7 +98,8 @@ Q1_DATA_QUALITY = ModelSpec(
     question=Q1,
     dataset_kind=DatasetKind.MARKET,
     title="Market data quality",
-    description="Missing values, stale series, outliers (|r| > 8 MAD), history length; one finding per issue.",
+    description="Missing values, stale series, outliers (|r - rolling median| > 10 x 1.4826 x MAD over a centred "
+                "63-day window, at least 20 values), history length; one finding per issue.",
     params=[ParamSpec(name="stale_days", type="int", default=5, minimum=2, maximum=30,
                       description="A run of this many identical consecutive returns of 0 counts as stale.")],
     metrics=[
