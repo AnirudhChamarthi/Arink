@@ -1,0 +1,101 @@
+{
+  "benchmark": "performance",
+  "protocol_version": "1.0",
+  "git_commit": "21c1482",
+  "generated_at": "2026-11-24T04:55:24Z",
+  "environment": {
+    "python": "3.13.18",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "os": "Linux 6.18.44-fc-v819",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "cpu_count": 2
+  },
+  "citable": true,
+  "repeats": 7,
+  "latency": [
+    {
+      "calculation": "parametric_var",
+      "positions": 10,
+      "median_ms": 0.258
+    },
+    {
+      "calculation": "historical_var",
+      "positions": 10,
+      "median_ms": 0.223
+    },
+    {
+      "calculation": "montecarlo_var (10,000 sims)",
+      "positions": 10,
+      "median_ms": 2.53
+    },
+    {
+      "calculation": "parametric_var trace",
+      "positions": 10,
+      "median_ms": 1.414
+    },
+    {
+      "calculation": "parametric_var",
+      "positions": 100,
+      "median_ms": 1.251
+    },
+    {
+      "calculation": "historical_var",
+      "positions": 100,
+      "median_ms": 1.629
+    },
+    {
+      "calculation": "montecarlo_var (10,000 sims)",
+      "positions": 100,
+      "median_ms": 22.337
+    },
+    {
+      "calculation": "parametric_var trace",
+      "positions": 100,
+      "median_ms": 11.552
+    },
+    {
+      "calculation": "parametric_var",
+      "positions": 500,
+      "median_ms": 6.178
+    },
+    {
+      "calculation": "historical_var",
+      "positions": 500,
+      "median_ms": 7.221
+    },
+    {
+      "calculation": "montecarlo_var (10,000 sims)",
+      "positions": 500,
+      "median_ms": 223.026
+    },
+    {
+      "calculation": "parametric_var trace",
+      "positions": 500,
+      "median_ms": 59.011
+    },
+    {
+      "calculation": "rolling backtest, historical (1,000 days)",
+      "positions": 1,
+      "median_ms": 27.517
+    },
+    {
+      "calculation": "rolling backtest, parametric (1,000 days)",
+      "positions": 1,
+      "median_ms": 7.485
+    },
+    {
+      "calculation": "rolling backtest, ewma (1,000 days)",
+      "positions": 1,
+      "median_ms": 51.343
+    }
+  ],
+  "tests": {
+    "engine_tests_passed": 198,
+    "engine_summary": "198 passed in 5.19s",
+    "harness_tests_passed": 20,
+    "harness_summary": "20 passed in 5.25s",
+    "all_passed": true
+  }
+}
