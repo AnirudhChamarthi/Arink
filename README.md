@@ -26,15 +26,16 @@ Riskbot is a **portfolio risk workstation**: a Windows WPF desktop client talks 
 **Architecture**
 
 ```
- Web UI ──┐                       ┌─► Math core (pure Python, no AI)
- REST  ───┼─► Service layer ──────┤     market · balance sheet · climate · validation
- MCP   ───┘   (one contract)      └─► Orchestration (LangGraph)
-                                        fan-out of variations · verification · analyst sign-off
+ Web UI ────────┐
+ WPF desktop ───┼─ REST ─┐                    ┌─► Math core (pure Python, no AI)
+ Excel (RTD) ───┘        ├─► Service layer ───┤     market · balance sheet · climate · validation
+ Claude / agents ─ MCP ──┘   (one contract)   └─► Orchestration (LangGraph)
+                                                    variations · verification · analyst sign-off
 ```
 
 - **Math core:** deterministic models and traces; the only source of numbers.
 - **Orchestration:** LangGraph runs each question as a resumable, auditable workflow and pauses for analyst review. An optional language model may draft rubric wording; a verifier rejects any number it writes that is not in the run's traces.
-- **Interfaces:** the web UI, REST API and MCP server return identical objects from the same service layer. Sign-off is human-only.
+- **Interfaces:** every client receives identical objects from the same service layer, and parity between interfaces is tested. The **web UI** is the primary client; the **WPF desktop** client is a thin client that shows headline results, embeds the same trace pages and feeds **Excel** through RTD; **AI agents** use the MCP server. Sign-off is human-only.
 
 **Delivery milestones**
 
@@ -42,6 +43,9 @@ Riskbot is a **portfolio risk workstation**: a Windows WPF desktop client talks 
 2. **M2:** Q3 transition risk with data-uncertainty bands.
 3. **M3:** Q2 balance-sheet resilience, including reverse stress testing.
 4. **M4:** exports, full model documentation, validation report and demo.
+5. **M5:** WPF thin client and Excel feed on the shared contract.
+
+**Evidence.** Benchmarks follow a protocol fixed before any results were produced: [benchmarks/PROTOCOL.md](benchmarks/PROTOCOL.md). Results are generated into [BENCHMARKS.md](BENCHMARKS.md).
 
 **Scope notes.** v2 is local-first and runs on synthetic or user-supplied data; sample datasets are clearly labelled as synthetic. It is a portfolio and learning project, not a production risk system, and it does not provide investment or regulatory advice.
 

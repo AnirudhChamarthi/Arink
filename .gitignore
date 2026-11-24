@@ -46,3 +46,6 @@ desktop.ini
 
 # Logs
 *.log
+
+# Benchmark raw market data (downloaded locally, never committed)
+benchmarks/data/
