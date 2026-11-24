@@ -19,6 +19,7 @@ venv/
 steps.md
 step*.md
 prompt.md
+planning/
 
 # .NET
 bin/

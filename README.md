@@ -2,6 +2,49 @@
 
 Riskbot is a **portfolio risk workstation**: a Windows WPF desktop client talks to a local **Python quantitative engine** over HTTP. Market data, VaR, Greeks, GARCH, stress tests, ESG/sustainability metrics, natural-language queries (NLQ), and Excel outputs all flow through a single **OpenAPI contract** in `shared/`.
 
+## Roadmap: Riskbot v2 (executive summary)
+
+> Status: **planning**. The application described below is under construction on the `minorTests` branch; the current release is the v1 workstation documented in the rest of this README.
+
+**What v2 is.** A risk-analysis service that answers three hard risk questions with transparent, checkable math, usable both by an analyst through a web UI and by other applications and AI agents through a REST API and an MCP server.
+
+**The three questions**
+
+| | Question | Risk dimensions |
+|---|---|---|
+| Q1 | How much could this portfolio lose in a bad week, and how far should we trust that number? | Market, model, data |
+| Q2 | Could a bank-like balance sheet survive a rate shock combined with a deposit run? | Interest-rate, credit, liquidity and funding, concentration, governance |
+| Q3 | How exposed is this portfolio to the low-carbon transition, and how reliable is the underlying data? | Climate transition, sustainability, data |
+
+**How each question is answered**
+
+- **Variations, not a single number.** Each question runs under a grid of methods and assumptions (for example normal, Student-t, historical, filtered historical simulation and extreme-value-theory tails for Q1). The output shows the range, the spread between methods, and which assumption flips the conclusion.
+- **Step-by-step math.** Every figure comes with a trace: the formula, the substituted inputs, each intermediate value, the assumptions and an input hash so the run can be reproduced exactly.
+- **Structured qualitative assessment.** Governance, concentration, disclosure and data-quality factors are scored with explicit rubrics, labelled as judgment, and editable by the analyst with every change logged.
+- **Validation built in.** Each model is tested against closed-form results, simulations with known answers or published tables, and Q1 variations are backtested (Kupiec, Christoffersen, Basel traffic light).
+
+**Architecture**
+
+```
+ Web UI ──┐                       ┌─► Math core (pure Python, no AI)
+ REST  ───┼─► Service layer ──────┤     market · balance sheet · climate · validation
+ MCP   ───┘   (one contract)      └─► Orchestration (LangGraph)
+                                        fan-out of variations · verification · analyst sign-off
+```
+
+- **Math core:** deterministic models and traces; the only source of numbers.
+- **Orchestration:** LangGraph runs each question as a resumable, auditable workflow and pauses for analyst review. An optional language model may draft rubric wording; a verifier rejects any number it writes that is not in the run's traces.
+- **Interfaces:** the web UI, REST API and MCP server return identical objects from the same service layer. Sign-off is human-only.
+
+**Delivery milestones**
+
+1. **M1:** Q1 end to end (core, variations, orchestration, REST, MCP, minimal UI).
+2. **M2:** Q3 transition risk with data-uncertainty bands.
+3. **M3:** Q2 balance-sheet resilience, including reverse stress testing.
+4. **M4:** exports, full model documentation, validation report and demo.
+
+**Scope notes.** v2 is local-first and runs on synthetic or user-supplied data; sample datasets are clearly labelled as synthetic. It is a portfolio and learning project, not a production risk system, and it does not provide investment or regulatory advice.
+
 ## Quick start
 
 Requires **Windows**, the **.NET 8 SDK**, and **Python 3.11+**.
