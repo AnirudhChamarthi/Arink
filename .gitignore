@@ -49,3 +49,7 @@ desktop.ini
 
 # Benchmark raw market data (downloaded locally, never committed)
 benchmarks/data/
+
+# Riskbot v2 local databases
+*.db
+*.db.checkpoints
